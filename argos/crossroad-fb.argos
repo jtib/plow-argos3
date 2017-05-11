@@ -16,7 +16,7 @@
   <!-- *************** -->
   <controllers>
 
-    <crossroad_footbot_controller id="fdc" library="/home/ivan/dev/argos-custom/argos3/plugins/robots/swarms/controllers/cpp/crossroad_footbot_controller/libcrossroad_footbot_controller.so">
+    <crossroad_footbot_controller id="fdc" library="/home/juliette/Documents/mila/plow-argos3/crossroad_footbot_controller/libcrossroad_footbot_controller.so">
       <actuators>
         <differential_steering implementation="default" />
         <leds implementation="default" medium="leds" />
@@ -37,7 +37,7 @@
   <!-- ****************** -->
   <!-- * Loop functions * -->
   <!-- ****************** -->
-  <loop_functions library="/home/ivan/dev/argos-custom/argos3/plugins/robots/swarms/controllers/cpp/crossroad_loop_footbot/libcrossroad_loop_footbot.so" label="crossroad_loop_footbot">
+  <loop_functions library="/home/juliette/Documents/mila/plow-argos3/crossroad_loop_footbot/libcrossroad_loop_footbot.so" label="crossroad_loop_footbot">
   </loop_functions>
 
   <!-- *********************** -->
@@ -46,7 +46,7 @@
   <arena size="10, 10, 1" center="0,0,0.5">
 
 
-    <floor id="floor" source="image" pixels_per_meter="50" path="/home/ivan/dev/argos-custom/argos3/plugins/robots/swarms/misc/crossroad.png"/>
+    <floor id="floor" source="image" pixels_per_meter="50" path="/home/juliette/Documents/mila/plow-argos3/crossroad.png"/>
 
     <box id="wall_north" size="10,0.1,0.5" movable="false">
       <body position="0,5,0" orientation="0,0,0" />
