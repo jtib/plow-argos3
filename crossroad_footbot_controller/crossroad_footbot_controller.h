@@ -35,7 +35,7 @@
 #include <argos3/plugins/robots/foot-bot/control_interface/ci_footbot_proximity_sensor.h>
 #include <argos3/core/simulator/entity/entity.h>
 
-#include <QGLWidget>
+//#include <QGLWidget>
 #include <QElapsedTimer>
 
 #ifdef __APPLE__

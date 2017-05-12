@@ -1,7 +1,6 @@
 #ifndef CROSSROAD_FUNCTIONS_FB_H
 #define CROSSROAD_FUNCTIONS_FB_H
 
-#include <argos3/plugins/simulator/visualizations/qt-opengl/qtopengl_user_functions.h>
 #include <argos3/core/simulator/loop_functions.h>
 #include <argos3/core/simulator/entity/floor_entity.h>
 #include <argos3/plugins/robots/foot-bot/simulator/footbot_entity.h>
@@ -9,7 +8,7 @@
 #include <argos3/plugins/simulator/visualizations/qt-opengl/qtopengl_camera.h>
 #include <argos3/plugins/simulator/visualizations/qt-opengl/qtopengl_user_functions.h>
 #include "/home/juliette/Documents/mila/plow-argos3/crossroad_footbot_controller/crossroad_footbot_controller.h"
-#include <QGLWidget>
+//#include <QGLWidget>
 #include <QElapsedTimer>
 
 #ifdef __APPLE__

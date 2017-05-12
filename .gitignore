@@ -1,0 +1,6 @@
+CMakeFiles/
+*_automoc.cpp
+*.cmake
+Makefile
+*.so
+CMakeCache.txt
