@@ -38,9 +38,9 @@ void CCrossroadFunctionsFb::SetPovCamera()
     */
 
     if(m_pcController != NULL){
-    	m_pcController->img_bits = m_OpenGlWidget->grabFrameBuffer().bits();
-    	m_pcController->bytesCount = m_OpenGlWidget->grabFrameBuffer().byteCount();
-		m_pcController->bytesPerLine = m_OpenGlWidget->grabFrameBuffer().bytesPerLine();
+    	m_pcController->img_bits = m_OpenGlWidget->grabFramebuffer().bits();
+    	m_pcController->bytesCount = m_OpenGlWidget->grabFramebuffer().byteCount();
+		m_pcController->bytesPerLine = m_OpenGlWidget->grabFramebuffer().bytesPerLine();
     }
 
 
