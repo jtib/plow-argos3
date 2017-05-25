@@ -4,3 +4,5 @@ CMakeFiles/
 Makefile
 *.so
 CMakeCache.txt
+.ycm_extra_conf.py
+*.out

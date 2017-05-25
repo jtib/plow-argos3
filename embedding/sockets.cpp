@@ -28,7 +28,8 @@ void Sockets::start()
   }
 }
 
-void Sockets::send() {
+void Sockets::send()
+{
   try
   {
     // Frame
@@ -48,7 +49,8 @@ void Sockets::send() {
   }  
 }
 
-void Sockets::receive() {
+void Sockets::receive()
+{
   try
   {
     float actions[8];
@@ -65,7 +67,8 @@ void Sockets::receive() {
   }
 }
 
-void Sockets::update() {
+void Sockets::update()
+{
   try
   {
     receive();
@@ -78,7 +81,13 @@ void Sockets::update() {
   }
 }
 
-Sockets::~Sockets() {
+Sockets::~Sockets()
+{
   clientSocket.close();
   serverSocket.close();
+}
+
+int main()
+{
+  return 0;
 }
