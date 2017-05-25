@@ -2,6 +2,7 @@
 #define SOCKETS_H
 
 #include <stdio.h>
+#include <iostream>
 #include <sys/socket.h>
 #include <stdlib.h>
 #include <netinet/in.h>
@@ -17,13 +18,11 @@ class Sockets {
   int port;
   //Environment --> CLoopWhatever? env;
   
-  int width;
-  int height;
   int t;
-  int state_dim;
-  int action_dim;
 
 public:
+
+  Sockets();
 
   void start();
 
