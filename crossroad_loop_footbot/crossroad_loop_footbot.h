@@ -10,6 +10,7 @@
 #include "/home/juliette/Documents/mila/plow-argos3/crossroad_footbot_controller/crossroad_footbot_controller.h"
 //#include <QGLWidget>
 #include <QElapsedTimer>
+#include <argos3/plugins/robots/generic/control_interface/ci_differential_steering_actuator.h>
 
 #ifdef __APPLE__
 #include <glu.h>
@@ -27,6 +28,7 @@ public:
    virtual ~CCrossroadFunctionsFb() {}
    void Init(TConfigurationNode& t_node);
    void Update();
+   virtual void PreStep();
    virtual void PostStep();
 
 private:
@@ -41,6 +43,8 @@ private:
 	CFootBotEntity* m_SelectedEntity;
 	CFootBotEntity* m_pcEFootBot;
 	CFootBotCrossroadController* m_pcController;
+
+    CCI_DifferentialSteeringActuator* m_diff_steer_actu;
 };
 
 #endif

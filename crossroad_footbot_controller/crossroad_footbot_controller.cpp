@@ -70,48 +70,58 @@ void CFootBotCrossroadController::Init(TConfigurationNode& t_node) {
 
 void CFootBotCrossroadController::ControlStep() {
   
-/* Get readings from proximity sensor */
-   const CCI_FootBotProximitySensor::TReadings& tProxReads = m_pcProximity->GetReadings();
-   /* Sum them together */
-   CVector2 cAccumulator;
-   for(size_t i = 0; i < tProxReads.size(); ++i) {
-      cAccumulator += CVector2(tProxReads[i].Value, tProxReads[i].Angle);
-   }
-   cAccumulator /= tProxReads.size();
-   /* If the angle of the vector is small enough and the closest obstacle
-    * is far enough, continue going straight, otherwise curve a little
-    */
-   CRadians cAngle = cAccumulator.Angle();
-   if(m_cGoStraightAngleRange.WithinMinBoundIncludedMaxBoundIncluded(cAngle) &&
-      cAccumulator.Length() < m_fDelta ) {
-      /* Go straight */
-      m_pcWheels->SetLinearVelocity(m_fWheelVelocity, m_fWheelVelocity);
-   }
-   else {
-      /* Turn, depending on the sign of the angle */
-      if(cAngle.GetValue() > 0.0f) {
-         m_pcWheels->SetLinearVelocity(m_fWheelVelocity, 0.0f);
-      }
-      else {
-         m_pcWheels->SetLinearVelocity(0.0f, m_fWheelVelocity);
-      }
-   }
+///* Get readings from proximity sensor */
+//   const CCI_FootBotProximitySensor::TReadings& tProxReads = m_pcProximity->GetReadings();
+//   /* Sum them together */
+//   CVector2 cAccumulator;
+//   for(size_t i = 0; i < tProxReads.size(); ++i) {
+//      cAccumulator += CVector2(tProxReads[i].Value, tProxReads[i].Angle);
+//   }
+//   cAccumulator /= tProxReads.size();
+//   /* If the angle of the vector is small enough and the closest obstacle
+//    * is far enough, continue going straight, otherwise curve a little
+//    */
+//   CRadians cAngle = cAccumulator.Angle();
+//   if(m_cGoStraightAngleRange.WithinMinBoundIncludedMaxBoundIncluded(cAngle) &&
+//      cAccumulator.Length() < m_fDelta ) {
+//      /* Go straight */
+//      m_pcWheels->SetLinearVelocity(m_fWheelVelocity, m_fWheelVelocity);
+//   }
+//   else {
+//      /* Turn, depending on the sign of the angle */
+//      if(cAngle.GetValue() > 0.0f) {
+//         m_pcWheels->SetLinearVelocity(m_fWheelVelocity, 0.0f);
+//      }
+//      else {
+//         m_pcWheels->SetLinearVelocity(0.0f, m_fWheelVelocity);
+//      }
+//   }
+//
+//   //RLOG << "Position: " << m_positioningSensor->GetReading().Position << std::endl;
+//   if(img_bits != NULL){
+//	   RLOG << "Img bits: " << img_bits << std::endl;
+//	   RLOG << "Bytes count: " << bytesCount << std::endl;
+//	   RLOG << "Bytes per line: " << bytesPerLine << std::endl;
+//   }
+//
+//	std::map<std::string, CVector3>::iterator it = positions_all.begin();
+//	for(; it != positions_all.end(); ++it){
+//		RLOG << it->first << ". Readings: " << it->second << std::endl;
+//	}
+//
+//	// TODO:
+//	// images
 
-   //RLOG << "Position: " << m_positioningSensor->GetReading().Position << std::endl;
-   if(img_bits != NULL){
-	   RLOG << "Img bits: " << img_bits << std::endl;
-	   RLOG << "Bytes count: " << bytesCount << std::endl;
-	   RLOG << "Bytes per line: " << bytesPerLine << std::endl;
-   }
+}
 
-	std::map<std::string, CVector3>::iterator it = positions_all.begin();
-	for(; it != positions_all.end(); ++it){
-		RLOG << it->first << ". Readings: " << it->second << std::endl;
-	}
+CCI_DifferentialSteeringActuator* CFootBotCrossroadController::wheels()
+{
+  return m_pcWheels;
+}
 
-	// TODO:
-	// images
-
+CCI_FootBotProximitySensor* CFootBotCrossroadController::proximity()
+{
+  return m_pcProximity;
 }
 
 /****************************************/

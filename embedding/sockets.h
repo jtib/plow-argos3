@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <string.h>
+#include "environment.h"
 #include <boost/asio.hpp>
 
 using boost::asio::ip::tcp;
@@ -16,7 +17,8 @@ class Sockets {
   tcp::socket clientSocket;
   int requestCount;
   int port;
-  //Environment --> CLoopWhatever? env;
+
+  Environment env;
   
   int t;
 

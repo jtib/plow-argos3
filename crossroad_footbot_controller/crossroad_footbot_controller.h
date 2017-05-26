@@ -99,6 +99,9 @@ class CFootBotCrossroadController : public CCI_Controller {
    std::map<std::string, CVector3> positions_all;
    std::string selected_robot;
 
+   CCI_DifferentialSteeringActuator* wheels();
+   CCI_FootBotProximitySensor* proximity();
+
 private:
 
 /* Pointer to the differential steering actuator */

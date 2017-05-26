@@ -59,7 +59,7 @@ void Sockets::receive()
 
     clientSocket.read_some(boost::asio::buffer(actions), error);
 
-    //TODO: env.execAction(actions);
+    env.setActions(actions);
   }
   catch (std::exception& e)
   {
