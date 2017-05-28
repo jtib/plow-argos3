@@ -59,12 +59,17 @@ void Sockets::receive()
 
     clientSocket.read_some(boost::asio::buffer(actions), error);
 
-    env.setActions(actions);
+    env.setActions(actions, 8);
   }
   catch (std::exception& e)
   {
     std::cerr << e.what() << std::endl;
   }
+}
+
+void Sockets::setEnvironment(Environment *env)
+{
+  this->env = *env;
 }
 
 void Sockets::update()

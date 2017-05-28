@@ -17,6 +17,7 @@ void CCrossroadFunctionsFb::Init(TConfigurationNode& t_node) {
 	m_pcEFootBot = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity("fu0"));
 	m_pcController = &dynamic_cast<CFootBotCrossroadController&>(m_pcEFootBot->GetControllableEntity().GetController());
     m_diff_steer_actu = m_pcController->wheels();
+    m_soc->setEnvironment(m_env);
 }
 
 /****************************************/

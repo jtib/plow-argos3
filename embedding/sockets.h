@@ -26,6 +26,8 @@ public:
 
   Sockets();
 
+  void setEnvironment(Environment *env);
+
   void start();
 
   void send();

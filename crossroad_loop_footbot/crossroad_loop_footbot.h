@@ -11,6 +11,8 @@
 //#include <QGLWidget>
 #include <QElapsedTimer>
 #include <argos3/plugins/robots/generic/control_interface/ci_differential_steering_actuator.h>
+#include "../embedding/sockets.h"
+#include "../embedding/environment.h"
 
 #ifdef __APPLE__
 #include <glu.h>
@@ -45,6 +47,8 @@ private:
 	CFootBotCrossroadController* m_pcController;
 
     CCI_DifferentialSteeringActuator* m_diff_steer_actu;
+    Environment* m_env;
+    Sockets* m_soc;
 };
 
 #endif

@@ -1,13 +1,21 @@
 #include "environment.h"
 
-void Environment::setActions(const float to_do[])
+Environment::Environment()
 {
-  actions = to_do;
+  m_footbot_ids.assign(0);
+  m_fb_speeds.assign(0);
+  m_fb_distances.assign(0);
+  m_fb_proximities.assign(0);
+}
+
+void Environment::setActions(const float* to_do, const int len)
+{
+  m_actions.assign(to_do, to_do + len);
 }
 
 int Environment::sendAction(int fb_id)
 {
-  return actions[fb_id];
+  return m_actions[fb_id];
 }
 
 void Environment::getResults(float *state, uint8_t *frame)
