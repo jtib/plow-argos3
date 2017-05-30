@@ -35,6 +35,9 @@
 #include <argos3/plugins/robots/foot-bot/control_interface/ci_footbot_proximity_sensor.h>
 #include <argos3/core/simulator/entity/entity.h>
 
+#include "../embedding/environment.h"
+#include "../embedding/sockets.h"
+
 //#include <QGLWidget>
 #include <QElapsedTimer>
 
@@ -99,8 +102,7 @@ class CFootBotCrossroadController : public CCI_Controller {
    std::map<std::string, CVector3> positions_all;
    std::string selected_robot;
 
-   CCI_DifferentialSteeringActuator* wheels();
-   CCI_FootBotProximitySensor* proximity();
+   int m_fb_id;
 
 private:
 

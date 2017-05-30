@@ -13,9 +13,9 @@ void Environment::setActions(const float* to_do, const int len)
   m_actions.assign(to_do, to_do + len);
 }
 
-int Environment::sendAction(int fb_id)
+float Environment::sendActions(int id)
 {
-  return m_actions[fb_id];
+  return m_actions[id];
 }
 
 void Environment::getResults(float *state, uint8_t *frame)

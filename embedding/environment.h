@@ -30,7 +30,7 @@ public:
    * Sends the footbot whose id it is the action it must do.
    * Called from the loop.
    */
-  int sendAction(int fb_id);
+  float sendActions(int id);
 
   /**
    * Returns the results (state + maybe frame) after the action

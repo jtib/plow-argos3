@@ -16,7 +16,6 @@ CCrossroadFunctionsFb::CCrossroadFunctionsFb() :
 void CCrossroadFunctionsFb::Init(TConfigurationNode& t_node) {
 	m_pcEFootBot = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity("fu0"));
 	m_pcController = &dynamic_cast<CFootBotCrossroadController&>(m_pcEFootBot->GetControllableEntity().GetController());
-    m_diff_steer_actu = m_pcController->wheels();
     m_soc->setEnvironment(m_env);
 }
 
@@ -76,7 +75,15 @@ void CCrossroadFunctionsFb::SetPovCamera()
 /****************************************/
 
 void CCrossroadFunctionsFb::PreStep(){
-  m_diff_steer_actu->SetLinearVelocity(2.,2.);
+  //TODO: lock this
+  std::vector<float> actions = m_env->sendActions();
+  for(int i=0; i++; i<8)
+  {
+    switch (actions[i])
+    {
+      
+
+  
 }
 
 void CCrossroadFunctionsFb::PostStep(){
