@@ -37,15 +37,16 @@ float LaunchARGoS() {
 /****************************************/
 /****************************************/
 
-int main() {
+void init_global() {
   // create socket
   Sockets soc = Sockets::Sockets();
+  int i=0;
   // create environment
   Environment env = Environment::Environment();
   // link the two
   soc.setEnvironment(&env);
   // initialize the footbot ids dictionary
-  std::map<std::string, int> fb_ids = {
+  std::map<std::string, int> fb_to_ids = {
                 { "fu0", 0 },
                 { "fu1", 1 },
                 { "fd0", 2 },
@@ -53,8 +54,15 @@ int main() {
                 { "fl0", 4 },
                 { "fl1", 5 },
                 { "fr0", 6 },
-                { "fr1", 7 } };    
-  
-  return 0;
+                { "fr1", 7 } }
+  std::map<int, std::string> ids_to_fb = {
+                { 0, "fu0" },
+                { 1, "fu1" },
+                { 2, "fd0" },
+                { 3, "fd1" },
+                { 4, "fl0" },
+                { 5, "fl1" },
+                { 6, "fr0" },
+                { 7, "fr1" } }
 }
 

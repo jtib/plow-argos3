@@ -40,6 +40,7 @@
 
 //#include <QGLWidget>
 #include <QElapsedTimer>
+#include <array>
 
 #ifdef __APPLE__
 #include <glu.h>

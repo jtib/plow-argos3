@@ -3,4 +3,7 @@
 
 extern Environment env;
 extern Sockets soc;
-extern std::map<std::string, int> fb_ids;
+extern std::map<std::string, int> fb_to_ids;
+extern std::map<int, std::string> ids_to_fb;
+
+void init_global();

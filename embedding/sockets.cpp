@@ -37,9 +37,16 @@ void Sockets::send()
     // speed, distance from departure, proximity reading
     float state[24]; //TODO: replace with 24
     // TODO: get state info from environment
+    std::array<std::array<int, 10>, 5> a;
+    for(int i=0;i<5;i++)
+    {
+      a[i].fill(42);
+    }
+
     
     // Send state info
     boost::system::error_code ignored_error;
+    boost::asio::write(clientSocket, boost::asio::buffer(a), ignored_error);
     boost::asio::write(clientSocket, boost::asio::buffer(frame), ignored_error);
     boost::asio::write(clientSocket, boost::asio::buffer(state), ignored_error);
   }

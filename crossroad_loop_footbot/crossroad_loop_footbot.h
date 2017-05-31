@@ -13,6 +13,8 @@
 #include <argos3/plugins/robots/generic/control_interface/ci_differential_steering_actuator.h>
 #include "../embedding/sockets.h"
 #include "../embedding/environment.h"
+#include "../embedding/global.h"
+#include <argos3/plugins/robots/foot-bot/control_interface/ci_footbot_proximity_sensor.h>
 
 #ifdef __APPLE__
 #include <glu.h>
@@ -26,29 +28,36 @@ class CCrossroadFunctionsFb : public CLoopFunctions {
 
 public:
 
-   CCrossroadFunctionsFb();
-   virtual ~CCrossroadFunctionsFb() {}
-   void Init(TConfigurationNode& t_node);
-   void Update();
-   virtual void PreStep();
-   virtual void PostStep();
+ CCrossroadFunctionsFb();
+ virtual ~CCrossroadFunctionsFb() {}
+ void Init(TConfigurationNode& t_node);
+ void Update();
+ void getStates();
+ virtual void PostStep();
 
 private:
-   	void ResetPosition();
-	void SetPovCamera();
 
-	CSimulator* m_Simulator;
+  void ResetPosition();
+  void SetPovCamera();
 
-	CQTOpenGLRender* m_Renderer;
-	CQTOpenGLCamera* m_Camera;
-	CQTOpenGLCamera::SSettings* m_CameraSettings;
-	CFootBotEntity* m_SelectedEntity;
-	CFootBotEntity* m_pcEFootBot;
-	CFootBotCrossroadController* m_pcController;
+  CSimulator* m_Simulator;
 
-    CCI_DifferentialSteeringActuator* m_diff_steer_actu;
-    Environment* m_env;
-    Sockets* m_soc;
+  CQTOpenGLRender* m_Renderer;
+  CQTOpenGLCamera* m_Camera;
+  CQTOpenGLCamera::SSettings* m_CameraSettings;
+  CFootBotEntity* m_SelectedEntity;
+  CFootBotEntity* m_pcEFootBots[];
+  CFootBotEntity* m_pcEFootbot;
+  CFootBotCrossroadController* m_pcControllers[];
+  CFootBotCrossroadController* m_pcController;
+
+  //State
+  std::array<std::array<float, 24>, 8> m_proximities;
+  std::array<float, 8> m_speeds;
+  std::array<float, 8> m_distances;
+
+  Environment* m_env;
+  Sockets* m_soc;
 };
 
 #endif

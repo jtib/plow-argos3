@@ -14,9 +14,23 @@ CCrossroadFunctionsFb::CCrossroadFunctionsFb() :
 /****************************************/
 
 void CCrossroadFunctionsFb::Init(TConfigurationNode& t_node) {
-	m_pcEFootBot = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity("fu0"));
-	m_pcController = &dynamic_cast<CFootBotCrossroadController&>(m_pcEFootBot->GetControllableEntity().GetController());
-    m_soc->setEnvironment(m_env);
+  // initialize environment & sockets
+  init_global();
+  //get all the footbots
+  for(int i=0; i<8; i++)
+  {
+    m_pcEFootBots[i] = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity(ids_to_fb[i]));
+  }
+  // don't break existing code while it's not adapted
+  m_pcEFootBot = m_pcEFootbots[0];
+
+  //get all the controllers
+  for(int i=0; i<8; i++)
+  {
+    m_pcControllers[i] = &dynamic_cast<CFootBotCrossroadController&>((m_pcEFootbots[i])->GetControllableEntity().GetController());
+  }
+  // don't break existing code while it's not adapted
+  m_pcController = m_pcControllers[0];
 }
 
 /****************************************/
@@ -74,17 +88,19 @@ void CCrossroadFunctionsFb::SetPovCamera()
 /****************************************/
 /****************************************/
 
-void CCrossroadFunctionsFb::PreStep(){
-  //TODO: lock this
-  std::vector<float> actions = m_env->sendActions();
-  for(int i=0; i++; i<8)
+void CCrossroadFunctionsFb::getStates(){
+  CCI_FootBotProximitySensor::TReadings& proximities;
+  for(int i=0; i<8; i++)
   {
-    switch (actions[i])
-    {
-      
+    proximities[i] = m_pcControllers[i]->getProximities();
+    m_speeds[i] = m_pcControllers[i]->getSpeed();
+    m_distances[i] = m_distances[i] + m_speeds[i];
+  }
+  // proximities treatment
+  for(int i=0; i<8; i++)
+  {
+    m_state[i][0] = 
 
-  
-}
 
 void CCrossroadFunctionsFb::PostStep(){
 	ResetPosition();

@@ -8,14 +8,18 @@
 #include <stdint.h>
 #include <boost/array.hpp>
 #include <vector>
+#include <boost/multi_array.hpp>
+#include <array>
+
+// argos2 includes
+#include <argos3/plugins/robots/foot-bot/control_interface/ci_footbot_proximity_sensor.h>
 
 class Environment
 {
-  boost::array<int, 8> m_footbot_ids;
   boost::array<float, 8> m_fb_speeds;
   boost::array<float, 8> m_fb_distances;
-  boost::array<float, 8> m_fb_proximities; // TODO: check what a proximity reading looks like
-  std::vector<float> m_actions;
+  std::array<std::array<float, 24>, 8> m_fb_proximities;
+  std::array<std::array<float, 2>, 8> m_actions;
 
 public:
 
@@ -24,21 +28,13 @@ public:
    */
   Environment();
 
-  void setActions(const float* to_do, const int len);
+  void setActions(const std::array<std::array<float, 2>, 8>& to_do);
 
   /**
    * Sends the footbot whose id it is the action it must do.
    * Called from the loop.
    */
-  float sendActions(int id);
-
-  /**
-   * Returns the results (state + maybe frame) after the action
-   * is executed.
-   * Called from the loop.
-   */
-  void getResults(float *state, uint8_t *frame);
-
+  std::array<float, 2>& getActions(const int id);
 };
 
 #endif

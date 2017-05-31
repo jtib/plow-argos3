@@ -73,9 +73,11 @@ void CFootBotCrossroadController::Init(TConfigurationNode& t_node) {
 
 void CFootBotCrossroadController::ControlStep() {
   // get the action to execute
-  float action = env.sendActions(val);
-  // TODO: execute the action (brake, acceleration)
-  
+  std::array<float, 2> action = env.getActions(m_fb_id);
+  // execute the action (brake, acceleration)
+  float wheel_speed = action[1] - action[0];
+  m_pcWheels->SetLinearVelocity(wheel_speed, wheel_speed);
+  //TODO: send the state back
   
 ///* Get readings from proximity sensor */
 //   const CCI_FootBotProximitySensor::TReadings& tProxReads = m_pcProximity->GetReadings();
@@ -119,16 +121,6 @@ void CFootBotCrossroadController::ControlStep() {
 //	// TODO:
 //	// images
 
-}
-
-CCI_DifferentialSteeringActuator* CFootBotCrossroadController::wheels()
-{
-  return m_pcWheels;
-}
-
-CCI_FootBotProximitySensor* CFootBotCrossroadController::proximity()
-{
-  return m_pcProximity;
 }
 
 /****************************************/
