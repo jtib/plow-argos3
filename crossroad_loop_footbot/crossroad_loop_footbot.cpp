@@ -96,10 +96,31 @@ void CCrossroadFunctionsFb::getStates(){
     m_speeds[i] = m_pcControllers[i]->getSpeed();
     m_distances[i] = m_distances[i] + m_speeds[i];
   }
-  // proximities treatment
-  for(int i=0; i<8; i++)
+  std::array<std::array<std::array<float, 2>, 24>, 8> proxima = this->ConvertTReadings(proximities);
+  m_env->setState(proxima, m_speeds, m_distances);
+
+std::array<std::array<std::array>> CCrossroadFunctionsFb::ConvertTReadings(CCI_FootBotProximitySensor::TReadings& proximities)
+{
+  std::size_t len = proximities.size();
+  if(len == 0)
+    std::cerr << "No readings" << std::endl;
+  else
   {
-    m_state[i][0] = 
+    std::size_t sublen = proximities[0].size();
+    std::array<std::array<std::array<float, 2>, sublen>, len> proxima;
+    for(int i = 0; i<len; i++)
+    {
+      for(int j = 0; j<sublen; j++)
+      {
+        proxima[i][j][0] = proximities[i][j].Value;
+        proxima[i][j][1] = proximities[i][j].Angle;
+      }
+    }
+  }
+  return proxima;
+}
+
+
 
 
 void CCrossroadFunctionsFb::PostStep(){

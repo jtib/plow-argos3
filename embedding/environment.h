@@ -16,9 +16,9 @@
 
 class Environment
 {
-  boost::array<float, 8> m_fb_speeds;
-  boost::array<float, 8> m_fb_distances;
-  std::array<std::array<float, 24>, 8> m_fb_proximities;
+  std::array<std::array<std::array<float, 2>, 24>, 8> m_proximities;
+  std::array<float, 8> m_speeds;
+  std::array<float, 8> m_distances;
   std::array<std::array<float, 2>, 8> m_actions;
 
 public:
@@ -35,6 +35,12 @@ public:
    * Called from the loop.
    */
   std::array<float, 2>& getActions(const int id);
+
+  /**
+   * Sets the state
+   */
+  void setState(std::array<std::array<std::array>> proximities, std::array<float> speeds, std::array<float> distances);
+
 };
 
 #endif

@@ -19,3 +19,12 @@ std::array<float, 2>& Environment::getActions(const int id)
 {
   return m_actions[id];
 }
+
+
+void setState(std::array<std::array<std::array>> proximities, std::array<float> speeds, std::array<float> distances)
+{
+  //TODO: check lengths
+  m_proximities = proximities;
+  m_speeds = speeds;
+  m_distances = distances;
+}

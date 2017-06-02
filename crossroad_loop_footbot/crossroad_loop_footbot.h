@@ -40,6 +40,8 @@ private:
   void ResetPosition();
   void SetPovCamera();
 
+  std::array<std::array<std::array>> ConvertTReadings(CCI_FootBotProximitySensor::TReadings& proximities);
+
   CSimulator* m_Simulator;
 
   CQTOpenGLRender* m_Renderer;

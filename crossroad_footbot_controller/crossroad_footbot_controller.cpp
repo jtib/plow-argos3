@@ -77,35 +77,7 @@ void CFootBotCrossroadController::ControlStep() {
   // execute the action (brake, acceleration)
   float wheel_speed = action[1] - action[0];
   m_pcWheels->SetLinearVelocity(wheel_speed, wheel_speed);
-  //TODO: send the state back
   
-///* Get readings from proximity sensor */
-//   const CCI_FootBotProximitySensor::TReadings& tProxReads = m_pcProximity->GetReadings();
-//   /* Sum them together */
-//   CVector2 cAccumulator;
-//   for(size_t i = 0; i < tProxReads.size(); ++i) {
-//      cAccumulator += CVector2(tProxReads[i].Value, tProxReads[i].Angle);
-//   }
-//   cAccumulator /= tProxReads.size();
-//   /* If the angle of the vector is small enough and the closest obstacle
-//    * is far enough, continue going straight, otherwise curve a little
-//    */
-//   CRadians cAngle = cAccumulator.Angle();
-//   if(m_cGoStraightAngleRange.WithinMinBoundIncludedMaxBoundIncluded(cAngle) &&
-//      cAccumulator.Length() < m_fDelta ) {
-//      /* Go straight */
-//      m_pcWheels->SetLinearVelocity(m_fWheelVelocity, m_fWheelVelocity);
-//   }
-//   else {
-//      /* Turn, depending on the sign of the angle */
-//      if(cAngle.GetValue() > 0.0f) {
-//         m_pcWheels->SetLinearVelocity(m_fWheelVelocity, 0.0f);
-//      }
-//      else {
-//         m_pcWheels->SetLinearVelocity(0.0f, m_fWheelVelocity);
-//      }
-//   }
-//
 //   //RLOG << "Position: " << m_positioningSensor->GetReading().Position << std::endl;
 //   if(img_bits != NULL){
 //	   RLOG << "Img bits: " << img_bits << std::endl;
