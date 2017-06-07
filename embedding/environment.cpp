@@ -8,6 +8,9 @@ Environment::Environment()
   {
     m_fb_proximities[i].fill(0);
   }
+  //TODO: get initial random speed
+  m_actions_executed = false;
+  m_actions_updated = true;
 }
 
 void Environment::setActions(const std::array<std::array<float, 2>, 8>& to_do)

@@ -19,7 +19,10 @@ class Environment
   std::array<std::array<std::array<float, 2>, 24>, 8> m_proximities;
   std::array<float, 8> m_speeds;
   std::array<float, 8> m_distances;
-  std::array<std::array<float, 2>, 8> m_actions;
+  
+  std::array<float, 8> m_actions;
+  bool m_actions_executed;
+  bool m_actions_updated;
 
 public:
 
@@ -34,7 +37,7 @@ public:
    * Sends the footbot whose id it is the action it must do.
    * Called from the loop.
    */
-  std::array<float, 2>& getActions(const int id);
+  float getActions(const int id);
 
   /**
    * Sets the state

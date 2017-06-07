@@ -63,7 +63,7 @@ void CFootBotCrossroadController::Init(TConfigurationNode& t_node) {
    m_cGoStraightAngleRange.Set(-ToRadians(m_cAlpha), ToRadians(m_cAlpha));
    GetNodeAttributeOrDefault(t_node, "delta", m_fDelta, m_fDelta);
    GetNodeAttributeOrDefault(t_node, "velocity", m_fWheelVelocity, m_fWheelVelocity);
-   m_fb_id = fb_ids[m_strId];
+   m_fb_id = fb_to_ids[m_strId];
 
    selected_robot = "fu0";
 }
@@ -74,8 +74,8 @@ void CFootBotCrossroadController::Init(TConfigurationNode& t_node) {
 void CFootBotCrossroadController::ControlStep() {
   // get the action to execute
   std::array<float, 2> action = env.getActions(m_fb_id);
-  // execute the action (brake, acceleration)
-  float wheel_speed = action[1] - action[0];
+  // execute the action (throttle)
+  float wheel_speed = action[0];
   m_pcWheels->SetLinearVelocity(wheel_speed, wheel_speed);
   
 //   //RLOG << "Position: " << m_positioningSensor->GetReading().Position << std::endl;
