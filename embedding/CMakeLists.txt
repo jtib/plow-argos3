@@ -14,8 +14,7 @@ link_directories(${ARGOS_LIBRARY_DIRS})
 
 add_library(environment MODULE environment.h environment.cpp)
 add_library(sockets MODULE sockets.h sockets.cpp)
-
-#add_executable(testing test.cpp)
+add_library(global MODULE global.h global.cpp)
 
 target_link_libraries(environment
   /usr/lib/argos3/libargos3core_simulator.so
@@ -23,7 +22,3 @@ target_link_libraries(environment
   /usr/lib/argos3/libargos3plugin_simulator_footbot.so
   /usr/lib/argos3/libargos3plugin_simulator_qtopengl.so
   ${QT_LIBRARIES} ${GLUT_LIBRARY} ${OPENGL_LIBRARY})
-
-#MESSAGE( STATUS "QT_LIBRARIES -> : " ${QT_LIBRARIES} )
-#MESSAGE( STATUS "GLUT_LIBRARY -> : " ${GLUT_LIBRARY} )
-#MESSAGE( STATUS "OPENGL_LIBRARY -> : " ${OPENGL_LIBRARY} )

@@ -15,6 +15,10 @@
 #include "../embedding/environment.h"
 #include "../embedding/global.h"
 #include <argos3/plugins/robots/foot-bot/control_interface/ci_footbot_proximity_sensor.h>
+#include <argos3/core/utility/logging/argos_log.h>
+#include <argos3/core/utility/configuration/argos_configuration.h>
+#include <argos3/plugins/simulator/entities/box_entity.h>
+#include <QImage>
 
 #ifdef __APPLE__
 #include <glu.h>
@@ -32,7 +36,7 @@ public:
  virtual ~CCrossroadFunctionsFb() {}
  void Init(TConfigurationNode& t_node);
  void Update();
- void getStates();
+ virtual void PreStep();
  virtual void PostStep();
 
 private:
@@ -40,23 +44,14 @@ private:
   void ResetPosition();
   void SetPovCamera();
 
-  std::array<std::array<std::array>> ConvertTReadings(CCI_FootBotProximitySensor::TReadings& proximities);
-
   CSimulator* m_Simulator;
 
   CQTOpenGLRender* m_Renderer;
   CQTOpenGLCamera* m_Camera;
   CQTOpenGLCamera::SSettings* m_CameraSettings;
   CFootBotEntity* m_SelectedEntity;
-  CFootBotEntity* m_pcEFootBots[];
-  CFootBotEntity* m_pcEFootbot;
-  CFootBotCrossroadController* m_pcControllers[];
+  CFootBotEntity* m_pcEFootBot;
   CFootBotCrossroadController* m_pcController;
-
-  //State
-  std::array<std::array<float, 24>, 8> m_proximities;
-  std::array<float, 8> m_speeds;
-  std::array<float, 8> m_distances;
 
   Environment* m_env;
   Sockets* m_soc;

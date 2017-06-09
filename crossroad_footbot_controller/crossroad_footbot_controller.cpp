@@ -71,12 +71,29 @@ void CFootBotCrossroadController::Init(TConfigurationNode& t_node) {
 /****************************************/
 /****************************************/
 
+std::array<std::array<float, 2>, 24> CFootBotCrossroadController::ConvertTReadings(CCI_FootBotProximitySensor::TReadings& proximities)
+{
+  std::array<std::array<float, 2>, 24> proxima;
+  for(int i = 0; i<24; i++)
+  {
+    proxima[i][0] = proximities[i].Value;
+    proxima[i][1] = proximities[i].Angle.GetValue();
+  }
+  return proxima;
+}
+
 void CFootBotCrossroadController::ControlStep() {
   // get the action to execute
-  std::array<float, 2> action = env.getActions(m_fb_id);
+  float wheel_speed = env.getActions(m_fb_id);
   // execute the action (throttle)
-  float wheel_speed = action[0];
   m_pcWheels->SetLinearVelocity(wheel_speed, wheel_speed);
+
+  // set the new state for this footbot
+  CCI_FootBotProximitySensor::TReadings proximities = m_pcProximity->GetReadings();
+  std::array<std::array<float, 2>, 24> proxim_readings = this->ConvertTReadings(proximities);
+  m_distance += wheel_speed;
+  env.setState(m_fb_id, proxim_readings, wheel_speed, m_distance);
+  
   
 //   //RLOG << "Position: " << m_positioningSensor->GetReading().Position << std::endl;
 //   if(img_bits != NULL){

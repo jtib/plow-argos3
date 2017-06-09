@@ -6,9 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <boost/array.hpp>
 #include <vector>
-#include <boost/multi_array.hpp>
 #include <array>
 
 // argos2 includes
@@ -43,9 +41,9 @@ public:
   float getActions(const int id);
 
   /**
-   * Sets the state
+   * Sets the state for one fb
    */
-  void setState(std::array<std::array<std::array<float, 2>, 24>, 8> proximities, std::array<float, 8> speeds, std::array<float, 8> distances);
+  void setState(int fb_id, std::array<std::array<float, 2>, 24> proximities, float speed, float distance);
 
   /**
    * Get the proximities as one huge array

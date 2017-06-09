@@ -25,11 +25,11 @@ float Environment::getActions(const int id)
 }
 
 
-void Environment::setState(std::array<std::array<std::array<float, 2>, 24>, 8> proximities, std::array<float, 8> speeds, std::array<float, 8> distances)
+void Environment::setState(int fb_id, std::array<std::array<float, 2>, 24> proximities, float speed, float distance)
 {
-  m_proximities = proximities;
-  m_speeds = speeds;
-  m_distances = distances;
+  m_proximities[fb_id] = proximities;
+  m_speeds[fb_id] = speed;
+  m_distances[fb_id] = distance;
 }
 
 std::array<float, 384> Environment::getProximities()

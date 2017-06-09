@@ -16,21 +16,21 @@ CCrossroadFunctionsFb::CCrossroadFunctionsFb() :
 void CCrossroadFunctionsFb::Init(TConfigurationNode& t_node) {
   // initialize environment & sockets
   init_global();
-  //get all the footbots
-  for(int i=0; i<8; i++)
-  {
-    m_pcEFootBots[i] = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity(ids_to_fb[i]));
-  }
-  // don't break existing code while it's not adapted
-  m_pcEFootBot = m_pcEFootbots[0];
+  ////get all the footbots
+  //for(int i=0; i<8; i++)
+  //{
+  //  m_pcEFootBots[i] = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity(ids_to_fb[i]));
+  //}
+  //// don't break existing code while it's not adapted
+  m_pcEFootBot = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity("fu0"));
 
-  //get all the controllers
-  for(int i=0; i<8; i++)
-  {
-    m_pcControllers[i] = &dynamic_cast<CFootBotCrossroadController&>((m_pcEFootbots[i])->GetControllableEntity().GetController());
-  }
-  // don't break existing code while it's not adapted
-  m_pcController = m_pcControllers[0];
+  ////get all the controllers
+  //for(int i=0; i<8; i++)
+  //{
+  //  m_pcControllers[i] = &dynamic_cast<CFootBotCrossroadController&>((m_pcEFootbots[i])->GetControllableEntity().GetController());
+  //}
+  //// don't break existing code while it's not adapted
+  m_pcController = &dynamic_cast<CFootBotCrossroadController&>(m_pcEFootBot->GetControllableEntity().GetController());
 }
 
 /****************************************/
@@ -85,43 +85,15 @@ void CCrossroadFunctionsFb::SetPovCamera()
     }
 }
 
-/****************************************/
-/****************************************/
+/*************************************/
+/*************************************/
 
-void CCrossroadFunctionsFb::getStates(){
-  CCI_FootBotProximitySensor::TReadings& proximities;
-  for(int i=0; i<8; i++)
-  {
-    proximities[i] = m_pcControllers[i]->getProximities();
-    m_speeds[i] = m_pcControllers[i]->getSpeed();
-    m_distances[i] = m_distances[i] + m_speeds[i];
-  }
-  std::array<std::array<std::array<float, 2>, 24>, 8> proxima = this->ConvertTReadings(proximities);
-  m_env->setState(proxima, m_speeds, m_distances);
-
-std::array<std::array<std::array>> CCrossroadFunctionsFb::ConvertTReadings(CCI_FootBotProximitySensor::TReadings& proximities)
-{
-  std::size_t len = proximities.size();
-  if(len == 0)
-    std::cerr << "No readings" << std::endl;
-  else
-  {
-    std::size_t sublen = proximities[0].size();
-    std::array<std::array<std::array<float, 2>, sublen>, len> proxima;
-    for(int i = 0; i<len; i++)
-    {
-      for(int j = 0; j<sublen; j++)
-      {
-        proxima[i][j][0] = proximities[i][j].Value;
-        proxima[i][j][1] = proximities[i][j].Angle;
-      }
-    }
-  }
-  return proxima;
+void CCrossroadFunctionsFb::PreStep(){
+  m_soc->receive();
 }
 
-
-
+/*************************************/
+/*************************************/
 
 void CCrossroadFunctionsFb::PostStep(){
 	ResetPosition();
@@ -135,6 +107,8 @@ void CCrossroadFunctionsFb::PostStep(){
     	    //m_Renderer->GetMainWindow().GetOpenGLWidget().GetSelectedEntity();
     	}
     }
+
+    m_soc->send();
 	//CSpace::TMapPerType& boxes = GetSpace().GetEntitiesByType("box");
 	//for(CSpace::TMapPerType::iterator it = boxes.begin(); it != boxes.end(); ++it) {
 	//	CBoxEntity& box = *any_cast<CBoxEntity*>(it->second);

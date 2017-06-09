@@ -136,6 +136,17 @@ private:
     * It is set to [-alpha,alpha]. */
    CRange<CRadians> m_cGoStraightAngleRange;
 
+   /**
+    * Distance travelled by the footbot.
+    */
+   float m_distance;
+
+   /**
+    * Convert TReadings to a multi-D array
+    * to pass to the environment.
+    */
+   std::array<std::array<float, 2>, 24> ConvertTReadings(CCI_FootBotProximitySensor::TReadings& proximities);
+
 };
 
 #endif
