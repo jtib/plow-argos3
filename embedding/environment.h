@@ -31,7 +31,10 @@ public:
    */
   Environment();
 
-  void setActions(const std::array<std::array<float, 2>, 8>& to_do);
+  /**
+   * Set the next actions to execute.
+   */
+  void setActions(const std::array<float, 8>& to_do);
 
   /**
    * Sends the footbot whose id it is the action it must do.
@@ -42,7 +45,22 @@ public:
   /**
    * Sets the state
    */
-  void setState(std::array<std::array<std::array>> proximities, std::array<float> speeds, std::array<float> distances);
+  void setState(std::array<std::array<std::array<float, 2>, 24>, 8> proximities, std::array<float, 8> speeds, std::array<float, 8> distances);
+
+  /**
+   * Get the proximities as one huge array
+   */
+  std::array<float, 384> getProximities();
+
+  /**
+   * Get the speeds
+   */
+  std::array<float, 8> getSpeeds();
+
+  /**
+   * Get the distances
+   */
+  std::array<float, 8> getDistances();
 
 };
 

@@ -19,8 +19,6 @@ class Sockets {
   int port;
 
   Environment env;
-  
-  int t;
 
 public:
 
@@ -33,8 +31,6 @@ public:
   void send();
 
   void receive();
-
-  void update();
 
   ~Sockets();  
 };

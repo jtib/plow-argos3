@@ -11,7 +11,6 @@ void Sockets::start()
   {
     boost::asio::io_service io_service;
     tcp::acceptor serverSocket (io_service, tcp::endpoint(tcp::v4(), port));
-    t = 0;
 
     // wait 10s for client to connect
     for(int i=0; i<100; i++)
@@ -34,21 +33,13 @@ void Sockets::send()
   {
     // Frame
     std::vector<uint8_t> frame;
-    // speed, distance from departure, proximity reading
-    float state[24]; //TODO: replace with 24
-    // TODO: get state info from environment
-    std::array<std::array<int, 10>, 5> a;
-    for(int i=0;i<5;i++)
-    {
-      a[i].fill(42);
-    }
-
-    
+    // get state
+    std::vector<boost::asio::const_buffer> state;
+    state.push_back(boost::asio::buffer(env.getProximities()));
+    state.push_back(boost::asio::buffer(env.getSpeeds()));
+    state.push_back(boost::asio::buffer(env.getDistances()));
     // Send state info
-    boost::system::error_code ignored_error;
-    boost::asio::write(clientSocket, boost::asio::buffer(a), ignored_error);
-    boost::asio::write(clientSocket, boost::asio::buffer(frame), ignored_error);
-    boost::asio::write(clientSocket, boost::asio::buffer(state), ignored_error);
+    clientSocket.send(state);
   }
   catch(std::exception& e)
   {
@@ -60,13 +51,13 @@ void Sockets::receive()
 {
   try
   {
-    float actions[8];
+    std::array<float, 8> actions;
     requestCount++;
     boost::system::error_code error;
 
     clientSocket.read_some(boost::asio::buffer(actions), error);
 
-    env.setActions(actions, 8);
+    env.setActions(actions);
   }
   catch (std::exception& e)
   {
@@ -79,27 +70,8 @@ void Sockets::setEnvironment(Environment *env)
   this->env = *env;
 }
 
-void Sockets::update()
-{
-  try
-  {
-    receive();
-    send();
-    t++;
-  }
-  catch (std::exception& e)
-  {
-    std::cerr << e.what() << std::endl;
-  }
-}
-
 Sockets::~Sockets()
 {
   clientSocket.close();
   serverSocket.close();
-}
-
-int main()
-{
-  return 0;
 }
