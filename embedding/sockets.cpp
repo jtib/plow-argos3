@@ -2,21 +2,33 @@
 
 using boost::asio::ip::tcp;
 
+Sockets::Sockets(Environment* env):
+  pServerSocket(NULL),
+  pClientSocket(NULL)
+{
+  m_env = env;
+}
+
 void Sockets::start()
 {
   // read environment variables
   port = std::atoi(std::getenv("ARGOS_PORT"));
 
+  std::cerr << "port is " << port << std::endl;
+
   try
   {
     boost::asio::io_service io_service;
-    tcp::acceptor serverSocket (io_service, tcp::endpoint(tcp::v4(), port));
+    std::cerr << "io_service created" << std::endl;
+    boost::shared_ptr<tcp::acceptor> pServerSocket(new tcp::acceptor(io_service, tcp::endpoint(tcp::v4(), port)));
+    std::cerr << "pServerSocket assigned" << std::endl;
 
     // wait 10s for client to connect
     for(int i=0; i<100; i++)
     {
-      tcp::socket clientSocket (io_service);
-      serverSocket.accept(clientSocket);
+      boost::shared_ptr<tcp::socket> pClientSocket(new tcp::socket(io_service));
+      pServerSocket->accept(*pClientSocket);
+      std::cerr << "pClientSocket assigned" << std::endl;
     }
   }
 
@@ -35,11 +47,11 @@ void Sockets::send()
     std::vector<uint8_t> frame;
     // get state
     std::vector<boost::asio::const_buffer> state;
-    state.push_back(boost::asio::buffer(env.getProximities()));
-    state.push_back(boost::asio::buffer(env.getSpeeds()));
-    state.push_back(boost::asio::buffer(env.getDistances()));
+    state.push_back(boost::asio::buffer(m_env->getProximities()));
+    state.push_back(boost::asio::buffer(m_env->getSpeeds()));
+    state.push_back(boost::asio::buffer(m_env->getDistances()));
     // Send state info
-    clientSocket.send(state);
+    pClientSocket->send(state);
   }
   catch(std::exception& e)
   {
@@ -55,9 +67,9 @@ void Sockets::receive()
     requestCount++;
     boost::system::error_code error;
 
-    clientSocket.read_some(boost::asio::buffer(actions), error);
+    pClientSocket->read_some(boost::asio::buffer(actions), error);
 
-    env.setActions(actions);
+    m_env->setActions(actions);
   }
   catch (std::exception& e)
   {
@@ -65,13 +77,8 @@ void Sockets::receive()
   }
 }
 
-void Sockets::setEnvironment(Environment *env)
-{
-  this->env = *env;
-}
-
 Sockets::~Sockets()
 {
-  clientSocket.close();
-  serverSocket.close();
+  pClientSocket->close();
+  pServerSocket->close();
 }

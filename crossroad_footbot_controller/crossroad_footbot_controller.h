@@ -72,6 +72,21 @@ class CFootBotCrossroadController : public CCI_Controller {
     * file in the <controllers><footbot_diffusion_controller> section.
     */
    virtual void Init(TConfigurationNode& t_node);
+   
+   /**
+    * Set the environment
+    */
+   void setEnvironment(Environment* env);
+
+   /**
+    * Get the str id
+    */
+   std::string getstrId();
+
+   /**
+    * Set the int id
+    */
+   void setFbId(int FbId);
 
    /*
     * This function is called once every time step.
@@ -102,8 +117,6 @@ class CFootBotCrossroadController : public CCI_Controller {
    int bytesPerLine;
    std::map<std::string, CVector3> positions_all;
    std::string selected_robot;
-
-   int m_fb_id;
 
 private:
 
@@ -146,6 +159,9 @@ private:
     * to pass to the environment.
     */
    std::array<std::array<float, 2>, 24> ConvertTReadings(CCI_FootBotProximitySensor::TReadings& proximities);
+   
+   int m_fb_id;
+   Environment* m_env;
 
 };
 

@@ -19,6 +19,8 @@ add_library(crossroad_loop_footbot MODULE
   crossroad_loop_footbot.cpp)
 
 target_link_libraries(crossroad_loop_footbot
+  /home/juliette/Documents/mila/plow-argos3/embedding/libenvironment.so
+  /home/juliette/Documents/mila/plow-argos3/embedding/libsockets.so
   /usr/lib/argos3/libargos3core_simulator.so
   /usr/lib/argos3/libargos3plugin_simulator_entities.so
   /usr/lib/argos3/libargos3plugin_simulator_footbot.so

@@ -13,12 +13,12 @@
 #include <argos3/plugins/robots/generic/control_interface/ci_differential_steering_actuator.h>
 #include "../embedding/sockets.h"
 #include "../embedding/environment.h"
-#include "../embedding/global.h"
 #include <argos3/plugins/robots/foot-bot/control_interface/ci_footbot_proximity_sensor.h>
 #include <argos3/core/utility/logging/argos_log.h>
 #include <argos3/core/utility/configuration/argos_configuration.h>
 #include <argos3/plugins/simulator/entities/box_entity.h>
 #include <QImage>
+#include <array>
 
 #ifdef __APPLE__
 #include <glu.h>
@@ -49,8 +49,10 @@ private:
   CQTOpenGLRender* m_Renderer;
   CQTOpenGLCamera* m_Camera;
   CQTOpenGLCamera::SSettings* m_CameraSettings;
+  std::array<CFootBotEntity*, 8> m_pcEFootbots; 
   CFootBotEntity* m_SelectedEntity;
   CFootBotEntity* m_pcEFootBot;
+  std::array<CFootBotCrossroadController*, 8> m_pcControllers;
   CFootBotCrossroadController* m_pcController;
 
   Environment* m_env;

@@ -9,22 +9,21 @@
 #include <string.h>
 #include "environment.h"
 #include <boost/asio.hpp>
+#include <boost/shared_ptr.hpp>
 
 using boost::asio::ip::tcp;
 
 class Sockets {
-  tcp::acceptor serverSocket;
-  tcp::socket clientSocket;
-  int requestCount;
   int port;
+  boost::shared_ptr<tcp::acceptor> pServerSocket;
+  boost::shared_ptr<tcp::socket> pClientSocket;
+  int requestCount;
 
-  Environment env;
+  Environment* m_env;
 
 public:
 
-  Sockets();
-
-  void setEnvironment(Environment *env);
+  Sockets(Environment* env);
 
   void start();
 

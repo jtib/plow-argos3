@@ -15,22 +15,55 @@ CCrossroadFunctionsFb::CCrossroadFunctionsFb() :
 
 void CCrossroadFunctionsFb::Init(TConfigurationNode& t_node) {
   // initialize environment & sockets
-  init_global();
-  ////get all the footbots
-  //for(int i=0; i<8; i++)
-  //{
-  //  m_pcEFootBots[i] = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity(ids_to_fb[i]));
-  //}
-  //// don't break existing code while it's not adapted
+  // create environment
+  Environment env;
+  // create socket
+  Sockets soc(&env);
+  std::cerr << "env and soc created" << std::endl;
+  soc.start();
+  std::cerr << "soc started" << std::endl;
+  // initialize the footbot ids dictionary
+  std::map<std::string, int> fb_to_ids = {
+                { "fu0", 0 },
+                { "fu1", 1 },
+                { "fd0", 2 },
+                { "fd1", 3 },
+                { "fl0", 4 },
+                { "fl1", 5 },
+                { "fr0", 6 },
+                { "fr1", 7 } };
+  std::map<int, std::string> ids_to_fb = {
+                { 0, "fu0" },
+                { 1, "fu1" },
+                { 2, "fd0" },
+                { 3, "fd1" },
+                { 4, "fl0" },
+                { 5, "fl1" },
+                { 6, "fr0" },
+                { 7, "fr1" } };
+  m_env = &env;
+  m_soc = &soc;
+  
+  //get all the footbots
+  for(int i=0; i<8; i++)
+  {
+    m_pcEFootbots[i] = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity(ids_to_fb[i]));
+  }
+  // don't break existing code while it's not adapted
   m_pcEFootBot = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity("fu0"));
 
-  ////get all the controllers
-  //for(int i=0; i<8; i++)
-  //{
-  //  m_pcControllers[i] = &dynamic_cast<CFootBotCrossroadController&>((m_pcEFootbots[i])->GetControllableEntity().GetController());
-  //}
-  //// don't break existing code while it's not adapted
+  //get all the controllers
+  for(int i=0; i<8; i++)
+  {
+    m_pcControllers[i] = &dynamic_cast<CFootBotCrossroadController&>((m_pcEFootbots[i])->GetControllableEntity().GetController());
+    // set the environment
+    m_pcControllers[i]->setEnvironment(&env);
+    m_pcControllers[i]->setFbId(fb_to_ids[m_pcControllers[i]->getstrId()]);
+  }
+  // don't break existing code while it's not adapted
   m_pcController = &dynamic_cast<CFootBotCrossroadController&>(m_pcEFootBot->GetControllableEntity().GetController());
+
+  std::cout << "plopiplop" << std::endl;
 }
 
 /****************************************/
