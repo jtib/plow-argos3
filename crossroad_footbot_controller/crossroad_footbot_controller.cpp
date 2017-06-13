@@ -63,6 +63,8 @@ void CFootBotCrossroadController::Init(TConfigurationNode& t_node) {
    m_cGoStraightAngleRange.Set(-ToRadians(m_cAlpha), ToRadians(m_cAlpha));
    GetNodeAttributeOrDefault(t_node, "delta", m_fDelta, m_fDelta);
    GetNodeAttributeOrDefault(t_node, "velocity", m_fWheelVelocity, m_fWheelVelocity);
+
+   selected_robot = "fu0";
 }
 
 /****************************************/
@@ -71,6 +73,11 @@ void CFootBotCrossroadController::Init(TConfigurationNode& t_node) {
 void CFootBotCrossroadController::setEnvironment(Environment* env)
 {
   m_env = env;
+}
+
+float CFootBotCrossroadController::getInitialVelocity()
+{
+  return m_fWheelVelocity;
 }
 
 std::string CFootBotCrossroadController::getstrId()

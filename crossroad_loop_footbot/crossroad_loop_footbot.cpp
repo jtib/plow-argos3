@@ -3,6 +3,7 @@
 #include <argos3/plugins/simulator/entities/box_entity.h>
 #include <QImage>
 #include "crossroad_loop_footbot.h"
+#include <unistd.h>
 
 static const Real POV_HEIGHT = 0.2f;
 
@@ -48,6 +49,9 @@ void CCrossroadFunctionsFb::Init(TConfigurationNode& t_node) {
   // don't break existing code while it's not adapted
   m_pcEFootBot = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity("fu0"));
 
+  //for the initial velocities
+  std::array<float, 8> init_velocities;
+
   //get all the controllers
   for(int i=0; i<8; i++)
   {
@@ -55,9 +59,16 @@ void CCrossroadFunctionsFb::Init(TConfigurationNode& t_node) {
     // set the environment
     m_pcControllers[i]->setEnvironment(&m_env);
     m_pcControllers[i]->setFbId(fb_to_ids[m_pcControllers[i]->getstrId()]);
+    // get initial velocity
+    std::cerr << "Getting initial velocities" << std::endl;
+    init_velocities[i] = m_pcControllers[i]->getInitialVelocity();
   }
   // don't break existing code while it's not adapted
   m_pcController = &dynamic_cast<CFootBotCrossroadController&>(m_pcEFootBot->GetControllableEntity().GetController());
+
+  // set initial velocities in the environment
+  std::cerr << "Setting initial velocities" << std::endl;
+  m_env.setActions(init_velocities);
 
   std::cerr << "loop functions initialized" << std::endl;
 }
@@ -118,8 +129,12 @@ void CCrossroadFunctionsFb::SetPovCamera()
 /*************************************/
 
 void CCrossroadFunctionsFb::PreStep(){
-  std::cerr << "trying to receive..." << std::endl;
-  m_soc.receive();
+  std::cerr << "entering prestep" << std::endl;
+  if(m_env.getTime()!=0)
+  {
+    std::cerr << "trying to receive..." << std::endl;
+    m_soc.receive();
+  }
 }
 
 /*************************************/
@@ -127,18 +142,19 @@ void CCrossroadFunctionsFb::PreStep(){
 
 void CCrossroadFunctionsFb::PostStep(){
   std::cerr << "entering post-step" << std::endl;
-  ResetPosition();
-  SetPovCamera();
+  //ResetPosition();
+  //SetPovCamera();
 
-  if(m_pcController != NULL){
-    if(m_pcController->selected_robot != "none"){
-      CFootBotEntity &cFootBot = dynamic_cast<CFootBotEntity&>(GetSpace().GetEntity(m_pcController->selected_robot));
-      m_Renderer->GetMainWindow().GetOpenGLWidget().SelectEntity(cFootBot);
-      //m_Renderer = dynamic_cast<CQTOpenGLRender*>(&GetSimulator().GetVisualization());
-      //m_Renderer->GetMainWindow().GetOpenGLWidget().GetSelectedEntity();
-    }
-  }
+  //if(m_pcController != NULL){
+  //  if(m_pcController->selected_robot != "none"){
+  //    CFootBotEntity &cFootBot = dynamic_cast<CFootBotEntity&>(GetSpace().GetEntity(m_pcController->selected_robot));
+  //    m_Renderer->GetMainWindow().GetOpenGLWidget().SelectEntity(cFootBot);
+  //    //m_Renderer = dynamic_cast<CQTOpenGLRender*>(&GetSimulator().GetVisualization());
+  //    //m_Renderer->GetMainWindow().GetOpenGLWidget().GetSelectedEntity();
+  //  }
+  //}
 
+  m_env.incTime();
   m_soc.send();
   //CSpace::TMapPerType& boxes = GetSpace().GetEntitiesByType("box");
   //for(CSpace::TMapPerType::iterator it = boxes.begin(); it != boxes.end(); ++it) {

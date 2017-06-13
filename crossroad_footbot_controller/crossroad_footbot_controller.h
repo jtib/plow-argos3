@@ -79,6 +79,11 @@ class CFootBotCrossroadController : public CCI_Controller {
    void setEnvironment(Environment* env);
 
    /**
+    * Return initial velocity
+    */
+   float getInitialVelocity();
+   
+   /**
     * Get the str id
     */
    std::string getstrId();

@@ -22,12 +22,29 @@ class Environment
   bool m_actions_executed;
   bool m_actions_updated;
 
+  int t;
+
 public:
 
   /**
    * The constructor.
    */
   Environment();
+
+  /**
+   * Get time
+   */
+  int getTime();
+
+  /**
+   * Set time
+   */
+  void setTime(int time);
+
+  /**
+   * Increment time
+   */
+  void incTime();
 
   /**
    * Set the next actions to execute.

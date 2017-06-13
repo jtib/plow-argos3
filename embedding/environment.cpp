@@ -2,6 +2,7 @@
 
 Environment::Environment()
 {
+  t = 0;
   m_speeds.fill(0);
   m_distances.fill(0);
   for(int i=0; i<8; i++)
@@ -12,6 +13,21 @@ Environment::Environment()
   //TODO: get initial random speed
   m_actions_executed = false;
   m_actions_updated = true;
+}
+
+int Environment::getTime()
+{
+  return t;
+}
+
+void Environment::setTime(int time)
+{
+  t = time;
+}
+
+void Environment::incTime()
+{
+  t++;
 }
 
 void Environment::setActions(const std::array<float, 8>& to_do)
