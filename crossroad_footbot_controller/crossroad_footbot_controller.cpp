@@ -101,6 +101,7 @@ std::array<std::array<float, 2>, 24> CFootBotCrossroadController::ConvertTReadin
 /*************************************/
 
 void CFootBotCrossroadController::ControlStep() {
+  std::cerr << "entering control step" << std::endl;
   // get the action to execute
   float wheel_speed = m_env->getActions(m_fb_id);
   // execute the action (throttle)

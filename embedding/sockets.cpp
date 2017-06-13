@@ -1,12 +1,13 @@
 #include "sockets.h"
+#include <unistd.h>
 
 using boost::asio::ip::tcp;
 
-Sockets::Sockets(Environment* env):
+Sockets::Sockets(Environment &env):
   pServerSocket(NULL),
   pClientSocket(NULL)
 {
-  m_env = env;
+  m_env = &env;
 }
 
 void Sockets::start()
@@ -20,16 +21,13 @@ void Sockets::start()
   {
     boost::asio::io_service io_service;
     std::cerr << "io_service created" << std::endl;
-    boost::shared_ptr<tcp::acceptor> pServerSocket(new tcp::acceptor(io_service, tcp::endpoint(tcp::v4(), port)));
+    
+    pServerSocket = boost::shared_ptr<tcp::acceptor>(new tcp::acceptor(io_service, tcp::endpoint(tcp::v4(), port)));
     std::cerr << "pServerSocket assigned" << std::endl;
-
-    // wait 10s for client to connect
-    for(int i=0; i<100; i++)
-    {
-      boost::shared_ptr<tcp::socket> pClientSocket(new tcp::socket(io_service));
-      pServerSocket->accept(*pClientSocket);
-      std::cerr << "pClientSocket assigned" << std::endl;
-    }
+    
+    pClientSocket = boost::shared_ptr<tcp::socket>(new tcp::socket(io_service));
+    std::cerr << "pClientSocket assigned" << std::endl;
+    pServerSocket->accept(*pClientSocket);
   }
 
   // handle any exceptions
@@ -41,6 +39,7 @@ void Sockets::start()
 
 void Sockets::send()
 {
+  std::cerr << "sending" << std::endl;
   try
   {
     // Frame
@@ -61,6 +60,7 @@ void Sockets::send()
 
 void Sockets::receive()
 {
+  std::cerr << "receiving" << std::endl;
   try
   {
     std::array<float, 8> actions;

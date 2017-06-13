@@ -23,7 +23,7 @@ class Sockets {
 
 public:
 
-  Sockets(Environment* env);
+  Sockets(Environment &env);
 
   void start();
 

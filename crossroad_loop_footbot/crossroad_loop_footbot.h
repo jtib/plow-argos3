@@ -55,8 +55,8 @@ private:
   std::array<CFootBotCrossroadController*, 8> m_pcControllers;
   CFootBotCrossroadController* m_pcController;
 
-  Environment* m_env;
-  Sockets* m_soc;
+  Environment m_env;
+  Sockets m_soc;
 };
 
 #endif
