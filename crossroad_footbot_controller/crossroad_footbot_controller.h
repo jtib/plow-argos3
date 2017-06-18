@@ -159,12 +159,6 @@ private:
     */
    float m_distance;
 
-   /**
-    * Convert TReadings to a multi-D array
-    * to pass to the environment.
-    */
-   std::array<std::array<float, 2>, 24> ConvertTReadings(CCI_FootBotProximitySensor::TReadings& proximities);
-   
    int m_fb_id;
    Environment* m_env;
 

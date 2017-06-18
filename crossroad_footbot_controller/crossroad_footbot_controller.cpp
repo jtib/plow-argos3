@@ -93,20 +93,6 @@ void CFootBotCrossroadController::setFbId(int FbId)
 /****************************************/
 /****************************************/
 
-std::array<std::array<float, 2>, 24> CFootBotCrossroadController::ConvertTReadings(CCI_FootBotProximitySensor::TReadings& proximities)
-{
-  std::array<std::array<float, 2>, 24> proxima;
-  for(int i = 0; i<24; i++)
-  {
-    proxima[i][0] = proximities[i].Value;
-    proxima[i][1] = proximities[i].Angle.GetValue();
-  }
-  return proxima;
-}
-
-/*************************************/
-/*************************************/
-
 void CFootBotCrossroadController::ControlStep() {
   std::cerr << "entering control step" << std::endl;
   // get the action to execute
@@ -116,26 +102,8 @@ void CFootBotCrossroadController::ControlStep() {
 
   // set the new state for this footbot
   CCI_FootBotProximitySensor::TReadings proximities = m_pcProximity->GetReadings();
-  std::array<std::array<float, 2>, 24> proxim_readings = this->ConvertTReadings(proximities);
   m_distance += wheel_speed;
-  m_env->setState(m_fb_id, proxim_readings, wheel_speed, m_distance);
-  
-  
-//   //RLOG << "Position: " << m_positioningSensor->GetReading().Position << std::endl;
-//   if(img_bits != NULL){
-//	   RLOG << "Img bits: " << img_bits << std::endl;
-//	   RLOG << "Bytes count: " << bytesCount << std::endl;
-//	   RLOG << "Bytes per line: " << bytesPerLine << std::endl;
-//   }
-//
-//	std::map<std::string, CVector3>::iterator it = positions_all.begin();
-//	for(; it != positions_all.end(); ++it){
-//		RLOG << it->first << ". Readings: " << it->second << std::endl;
-//	}
-//
-//	// TODO:
-//	// images
-
+  m_env->setState(m_fb_id, proximities, wheel_speed, m_distance);
 }
 
 /****************************************/

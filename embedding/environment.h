@@ -7,20 +7,17 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <vector>
-#include <array>
-
-// argos2 includes
 #include <argos3/plugins/robots/foot-bot/control_interface/ci_footbot_proximity_sensor.h>
 
 class Environment
 {
-  std::array<std::array<std::array<float, 2>, 24>, 8> m_proximities;
-  std::array<float, 8> m_speeds;
-  std::array<float, 8> m_distances;
+  int m_nbFb;
+
+  std::vector<argos::CCI_FootBotProximitySensor::TReadings> m_proximities;
+  std::vector<float> m_speeds;
+  std::vector<float> m_distances;
   
-  std::array<float, 8> m_actions;
-  bool m_actions_executed;
-  bool m_actions_updated;
+  std::vector<float> m_actions;
 
   int t;
 
@@ -37,19 +34,19 @@ public:
   int getTime();
 
   /**
-   * Set time
-   */
-  void setTime(int time);
-
-  /**
    * Increment time
    */
   void incTime();
 
   /**
+   * Set the number of footbots
+   */
+  void setFbNumber(int nbFb);
+
+  /**
    * Set the next actions to execute.
    */
-  void setActions(const std::array<float, 8>& to_do);
+  void setActions(const std::vector<float>& to_do);
 
   /**
    * Sends the footbot whose id it is the action it must do.
@@ -60,22 +57,22 @@ public:
   /**
    * Sets the state for one fb
    */
-  void setState(int fb_id, std::array<std::array<float, 2>, 24> proximities, float speed, float distance);
+  void setState(int fb_id, argos::CCI_FootBotProximitySensor::TReadings& proximities, float speed, float distance);
 
   /**
-   * Get the proximities as one huge array
+   * Get the proximities as one huge vector
    */
-  std::array<float, 384> getProximities();
+  std::vector<float> getProximities();
 
   /**
    * Get the speeds
    */
-  std::array<float, 8> getSpeeds();
+  std::vector<float> getSpeeds();
 
   /**
    * Get the distances
    */
-  std::array<float, 8> getDistances();
+  std::vector<float> getDistances();
 
 };
 

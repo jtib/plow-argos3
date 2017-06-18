@@ -63,7 +63,7 @@ void Sockets::receive()
   std::cerr << "receiving" << std::endl;
   try
   {
-    std::array<float, 8> actions;
+    std::vector<float> actions;
     requestCount++;
     boost::system::error_code error;
 
