@@ -162,6 +162,8 @@ private:
    int m_fb_id;
    Environment* m_env;
 
+   float p_proxim_readings [PROXIM_SIZE];
+
 };
 
 #endif

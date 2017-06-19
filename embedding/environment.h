@@ -9,15 +9,21 @@
 #include <vector>
 #include <argos3/plugins/robots/foot-bot/control_interface/ci_footbot_proximity_sensor.h>
 
+#define STATE_SIZE 50
+#define PROXIM_SIZE 48
+
 class Environment
 {
   int m_nbFb;
 
-  std::vector<argos::CCI_FootBotProximitySensor::TReadings> m_proximities;
-  std::vector<float> m_speeds;
-  std::vector<float> m_distances;
+  float * p_state;
+
+  //std::vector<argos::CCI_FootBotProximitySensor::TReadings> m_proximities;
+  //std::vector<float> m_speeds;
+  //std::vector<float> m_distances;
   
-  std::vector<float> m_actions;
+  float * p_actions;
+  //std::vector<float> m_actions;
 
   int t;
 
@@ -44,9 +50,24 @@ public:
   void setFbNumber(int nbFb);
 
   /**
+   * Get the size of the state
+   */
+  int getStateSize();
+
+  /**
+   * Get the size of the actions array
+   */
+  int getActionsSize();
+
+  /**
    * Set the next actions to execute.
    */
-  void setActions(const std::vector<float>& to_do);
+  void setActions(float* to_do);
+
+  /**
+   * Get pointer to actions
+   */
+  float * getpActions();
 
   /**
    * Sends the footbot whose id it is the action it must do.
@@ -55,24 +76,34 @@ public:
   float getActions(const int id);
 
   /**
+   * Convert TReadings into float array
+   */
+  void convertProximities(int fbId, argos::CCI_FootBotProximitySensor::TReadings& proximities);
+
+  /**
    * Sets the state for one fb
    */
-  void setState(int fb_id, argos::CCI_FootBotProximitySensor::TReadings& proximities, float speed, float distance);
+  void setState(int fb_id, float * proximities, float speed, float distance);
 
-  /**
-   * Get the proximities as one huge vector
-   */
-  std::vector<float> getProximities();
+  ///**
+  // * Get the proximities as one huge vector
+  // */
+  //float * getProximities();
 
-  /**
-   * Get the speeds
-   */
-  std::vector<float> getSpeeds();
+  ///**
+  // * Get the speeds
+  // */
+  // getSpeeds();
 
+  ///**
+  // * Get the distances
+  // */
+  //std::vector<float> getDistances();
+  
   /**
-   * Get the distances
+   * Get the state
    */
-  std::vector<float> getDistances();
+  float * getState();
 
 };
 

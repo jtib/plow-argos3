@@ -11,6 +11,8 @@
 
 #include "../embedding/global.h"
 
+#define PROXIM_SIZE 48
+
 /****************************************/
 /****************************************/
 
@@ -103,7 +105,12 @@ void CFootBotCrossroadController::ControlStep() {
   // set the new state for this footbot
   CCI_FootBotProximitySensor::TReadings proximities = m_pcProximity->GetReadings();
   m_distance += wheel_speed;
-  m_env->setState(m_fb_id, proximities, wheel_speed, m_distance);
+  for(int i=0; i<(PROXIM_SIZE/2); ++i)
+  {
+    p_proxim_readings[2*i] = proximities[i].Angle.GetValue();
+    p_proxim_readings[2*i+1] = proximities[i].Value;
+  }
+  m_env->setState(m_fb_id, p_proxim_readings, wheel_speed, m_distance);
 }
 
 /****************************************/

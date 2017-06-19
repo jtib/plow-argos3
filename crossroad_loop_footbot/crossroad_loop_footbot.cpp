@@ -55,7 +55,7 @@ void CCrossroadFunctionsFb::Init(TConfigurationNode& t_node) {
 
   // set initial velocities in the environment
   std::cerr << "Setting initial velocities" << std::endl;
-  m_env.setActions(init_velocities);
+  m_env.setActions(&(init_velocities[0]));
 
   std::cerr << "loop functions initialized" << std::endl;
 }
@@ -69,15 +69,6 @@ void CCrossroadFunctionsFb::SetPovCamera()
     m_Camera = &m_Renderer->GetMainWindow().GetOpenGLWidget().GetCamera();
     CQTOpenGLWidget *m_OpenGlWidget = &m_Renderer->GetMainWindow().GetOpenGLWidget();
     CQTOpenGLWidget::SFrameGrabData *frame = &m_OpenGlWidget->GetFrameGrabData();
-
-    // http://doc.qt.io/qt-4.8/qimage.html#bits
-    // save image
-    /*
-    m_OpenGlWidget->grabFrameBuffer().save("test.jpg", 0, frame->Quality);
-    QImage img = m_OpenGlWidget->grabFrameBuffer();
-    uchar* bits = img.bits();
-    std::cout<< "Bits: " << sizeof(bits) << " byteCount: " << img.byteCount() << std::endl;
-    */
 
     if(m_pcController != NULL){
     	m_pcController->img_bits = m_OpenGlWidget->grabFramebuffer().bits();
