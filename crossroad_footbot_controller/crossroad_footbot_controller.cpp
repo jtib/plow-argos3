@@ -9,10 +9,6 @@
 #include <argos3/core/utility/math/angles.h>
 #include <QImage>
 
-#include "../embedding/global.h"
-
-#define PROXIM_SIZE 48
-
 /****************************************/
 /****************************************/
 
@@ -95,22 +91,31 @@ void CFootBotCrossroadController::setFbId(int FbId)
 /****************************************/
 /****************************************/
 
+std::array<float, 48> CFootBotCrossroadController::ConvertTReadings(CCI_FootBotProximitySensor::TReadings& proximities)
+{
+  std::array<float, 48> proxima;
+  for(int i = 0; i<24; i++)
+  {
+    proxima[2*i] = proximities[i].Value;
+    proxima[2*i+1] = proximities[i].Angle.GetValue();
+  }
+  return proxima;
+}
+
 void CFootBotCrossroadController::ControlStep() {
   std::cerr << "entering control step" << std::endl;
   // get the action to execute
   float wheel_speed = m_env->getActions(m_fb_id);
+  std::cerr << "Action [" << m_fb_id << "]: " << wheel_speed << std::endl;
   // execute the action (throttle)
   m_pcWheels->SetLinearVelocity(wheel_speed, wheel_speed);
 
   // set the new state for this footbot
   CCI_FootBotProximitySensor::TReadings proximities = m_pcProximity->GetReadings();
+  std::array<float, 48> proxim_readings = this->ConvertTReadings(proximities);
   m_distance += wheel_speed;
-  for(int i=0; i<(PROXIM_SIZE/2); ++i)
-  {
-    p_proxim_readings[2*i] = proximities[i].Angle.GetValue();
-    p_proxim_readings[2*i+1] = proximities[i].Value;
-  }
-  m_env->setState(m_fb_id, p_proxim_readings, wheel_speed, m_distance);
+  m_env->setState(m_fb_id, proxim_readings, wheel_speed, m_distance);
+
 }
 
 /****************************************/

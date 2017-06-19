@@ -45,13 +45,12 @@ void Sockets::send()
     // Frame
     std::vector<uint8_t> frame;
     // get state
-    //std::vector<boost::asio::const_buffer> state;
-    //state.push_back(boost::asio::buffer(m_env->getProximities()));
-    //state.push_back(boost::asio::buffer(m_env->getSpeeds()));
-    //state.push_back(boost::asio::buffer(m_env->getDistances()));
+    std::vector<boost::asio::const_buffer> state;
+    state.push_back(boost::asio::buffer(m_env->getProximities(), (m_env->getNbFb())*48*sizeof(float)));
+    state.push_back(boost::asio::buffer(m_env->getSpeeds(), (m_env->getNbFb())*sizeof(float)));
+    state.push_back(boost::asio::buffer(m_env->getDistances(), (m_env->getNbFb())*sizeof(float)));
     // Send state info
-    float * state = m_env->getState();
-    pClientSocket->send(boost::asio::buffer(state, m_env->getStateSize()));
+    pClientSocket->send(state);
   }
   catch(std::exception& e)
   {
@@ -64,15 +63,14 @@ void Sockets::receive()
   std::cerr << "receiving" << std::endl;
   try
   {
-    //std::vector<float> actions;
+    float * actions = m_env->getpActions();
     requestCount++;
     boost::system::error_code error;
 
-    float * actions = m_env->getpActions();
+    pClientSocket->read_some(boost::asio::buffer(actions, (m_env->getNbFb())*sizeof(float)), error);
 
-    pClientSocket->read_some(boost::asio::buffer(actions, m_env->getActionsSize()), error);
-
-    m_env->setActions(actions);
+    for(int i=0; i<m_env->getNbFb(); ++i)
+      std::cout << actions[i] << std::endl;
   }
   catch (std::exception& e)
   {
@@ -85,3 +83,4 @@ Sockets::~Sockets()
   pClientSocket->close();
   pServerSocket->close();
 }
+

@@ -27,35 +27,45 @@ void CCrossroadFunctionsFb::Init(TConfigurationNode& t_node) {
   // start the socket
   m_soc.start();
   std::cerr << "soc started" << std::endl;
+  
+  CSpace::TMapPerType& fbMap = *(&GetSpace().GetEntitiesByType("foot-bot"));
+  int nbFb = fbMap.size();
+  m_env.setNbFb(nbFb);
 
   std::vector<CFootBotEntity*> m_pcEFootbots (nbFb);
   std::vector<CFootBotCrossroadController*> m_pcControllers (nbFb);
   std::string str;
+
   //for the initial velocities
   std::vector<float> init_velocities (nbFb, 0.0);
-  
+
   int j;
   CSpace::TMapPerType::iterator it;
 
-  for(it = fbMap.begin(), j = 0; it != fbMap.end(); ++it, ++j)
+  for(it=fbMap.begin(), j=0; it != fbMap.end(); ++it, ++j)
   {
+    // get the current footbot's id
     str = it->first;
+    // get the associated entity
     m_pcEFootbots[j] = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity(str));
-    m_pcControllers[j] = &dynamic_cast<CFootBotCrossroadController&>((m_pcEFootbots[j])->GetControllableEntity().GetController());
+    // get the associated controller
+    m_pcControllers[j] = &dynamic_cast<CFootBotCrossroadController&>(m_pcEFootbots[j]->GetControllableEntity().GetController());
+    // pass it the environment
     m_pcControllers[j]->setEnvironment(&m_env);
+    // give it its numerical id
     m_pcControllers[j]->setFbId(j);
-    std::cerr << "Getting initial velocities" << std::endl;
+    // get initial velocity
+    std::cerr << "Getting initial velocity " << j << std::endl;
     init_velocities[j] = m_pcControllers[j]->getInitialVelocity();
-    std::cerr << "initial velocity: " << j << " " << str << " " << init_velocities[j] << std::endl;
   }
-  
+
   // don't break existing code while it's not adapted
   m_pcEFootBot = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity("fu0"));
   m_pcController = &dynamic_cast<CFootBotCrossroadController&>(m_pcEFootBot->GetControllableEntity().GetController());
 
   // set initial velocities in the environment
   std::cerr << "Setting initial velocities" << std::endl;
-  m_env.setActions(&(init_velocities[0]));
+  m_env.setActions(init_velocities);
 
   std::cerr << "loop functions initialized" << std::endl;
 }
@@ -75,8 +85,6 @@ void CCrossroadFunctionsFb::SetPovCamera()
     	m_pcController->bytesCount = m_OpenGlWidget->grabFramebuffer().byteCount();
 		m_pcController->bytesPerLine = m_OpenGlWidget->grabFramebuffer().bytesPerLine();
     }
-
-
 
     m_CameraSettings = &m_Camera->GetActiveSettings();
     m_SelectedEntity = dynamic_cast<CFootBotEntity*>(m_Renderer->GetMainWindow().GetOpenGLWidget().GetSelectedEntity());
@@ -108,7 +116,6 @@ void CCrossroadFunctionsFb::SetPovCamera()
 
 void CCrossroadFunctionsFb::PreStep(){
   std::cerr << "entering prestep" << std::endl;
-  usleep(10000000);
   if(m_env.getTime()!=0)
   {
     std::cerr << "trying to receive..." << std::endl;
@@ -121,25 +128,8 @@ void CCrossroadFunctionsFb::PreStep(){
 
 void CCrossroadFunctionsFb::PostStep(){
   std::cerr << "entering post-step" << std::endl;
-  //ResetPosition();
-  //SetPovCamera();
-
-  //if(m_pcController != NULL){
-  //  if(m_pcController->selected_robot != "none"){
-  //    CFootBotEntity &cFootBot = dynamic_cast<CFootBotEntity&>(GetSpace().GetEntity(m_pcController->selected_robot));
-  //    m_Renderer->GetMainWindow().GetOpenGLWidget().SelectEntity(cFootBot);
-  //    //m_Renderer = dynamic_cast<CQTOpenGLRender*>(&GetSimulator().GetVisualization());
-  //    //m_Renderer->GetMainWindow().GetOpenGLWidget().GetSelectedEntity();
-  //  }
-  //}
-
   m_env.incTime();
   m_soc.send();
-  //CSpace::TMapPerType& boxes = GetSpace().GetEntitiesByType("box");
-  //for(CSpace::TMapPerType::iterator it = boxes.begin(); it != boxes.end(); ++it) {
-  //	CBoxEntity& box = *any_cast<CBoxEntity*>(it->second);
-      //box.EnableLEDs(med);
-  //}
 }
 
 /****************************************/

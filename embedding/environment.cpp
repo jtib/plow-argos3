@@ -15,88 +15,59 @@ void Environment::incTime()
   t++;
 }
 
-void Environment::setFbNumber(int nbFb)
+void Environment::setNbFb(int numFb)
 {
-  m_nbFb = nbFb;
-  //m_actions.assign(nbFb, 0.0);
-  //m_speeds.assign(nbFb, 0.0);
-  //m_distances.assign(nbFb, 0.0);
-  //argos::CCI_FootBotProximitySensor::TReadings proxim (24);
-  //m_proximities.assign(nbFb, proxim);
-  p_state = new float[nbFb*STATE_SIZE];
-  p_actions = new float[nbFb];
+  nbFb = numFb;
+  m_speeds = new float[nbFb];
+  m_distances = new float[nbFb];
+  m_proximities = new float[nbFb*48];
+  m_actions = new float[nbFb];
 }
 
-int Environment::getStateSize()
+int Environment::getNbFb()
 {
-  return m_nbFb*STATE_SIZE*sizeof(float);
-}
-
-int Environment::getActionsSize()
-{
-  return m_nbFb;
+  return nbFb;
 }
 
 void Environment::setActions(float * to_do)
 {
-  p_actions = to_do;
+  m_actions = to_do;
+}
+
+void Environment::setActions(std::vector<float> to_do)
+{
+  std::copy(to_do.begin(), to_do.end(), m_actions);
 }
 
 float * Environment::getpActions()
 {
-  return p_actions;
+  return m_actions;
 }
 
 float Environment::getActions(const int id)
 {
-  return p_actions[id];
+  return m_actions[id];
 }
 
-void Environment::convertProximities(int fbId, argos::CCI_FootBotProximitySensor::TReadings& proximities)
+void Environment::setState(int fb_id, std::array<float, 48> proximities, float speed, float distance)
 {
-  for(int i=0; i<PROXIM_SIZE/2; ++i)
-  {
-    int I = STATE_SIZE*fbId+2*i;
-    p_state[I] = proximities[i].Angle.GetValue();
-    p_state[I+1] = proximities[i].Value;
-  }
+  memcpy(m_proximities + fb_id*48, proximities.data(), 48*sizeof(float));
+  m_speeds[fb_id] = speed;
+  m_distances[fb_id] = distance;
 }
 
-void Environment::setState(int fb_id, float * proximities, float speed, float distance)
+float * Environment::getProximities()
 {
-  //convertProximities(fb_id, proximities);
-  p_state[STATE_SIZE*fb_id] = *proximities;
-  p_state[(STATE_SIZE*fb_id)+PROXIM_SIZE] = speed;
-  p_state[(STATE_SIZE*fb_id)+PROXIM_SIZE+1] = distance;
+  return m_proximities;
 }
 
-float * Environment::getState()
+float * Environment::getSpeeds()
 {
-  return p_state;
+  return m_speeds;
 }
 
-//std::vector<float> Environment::getProximities()
-//{
-//  std::vector<float> proxima;
-//  proxima.assign(2*24*m_nbFb, 0.0);
-//  for(int i=0; i<m_nbFb; i++)
-//  {
-//    for(int j=0; j<24; j++)
-//    {
-//      int I = i*48 + j*2;
-//      proxima[I] = m_proximities[i][j].Angle.GetValue();
-//      proxima[I+1] = m_proximities[i][j].Value;
-//    }
-//  }
-//  return proxima;
-//}
-//
-//std::vector<float> Environment::getSpeeds()
-//{
-//  return m_speeds;
-//}
-//
-//std::vector<float> Environment::getDistances()
-//{
-//  return m_distances;
-//}
+float * Environment::getDistances()
+{
+  return m_distances;
+}
+

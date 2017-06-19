@@ -99,7 +99,7 @@
 
     <!-- footboot up (id: fu0, fu1) -->
     <foot-bot id="fu0" rab_data_size="2" rab_range="5">
-      <body position="-2.0,-0.3,0.0" orientation="15,0,0" />
+      <body position="-2.0,-0.3,0.0" orientation="0,0,0" />
       <controller config="fdc" />
     </foot-bot>
     <foot-bot id="fu1" rab_data_size="2" rab_range="5">
