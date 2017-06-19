@@ -22,55 +22,85 @@ void CCrossroadFunctionsFb::Init(TConfigurationNode& t_node) {
   m_soc.start();
   std::cerr << "soc started" << std::endl;
   // initialize the footbot ids dictionary
-  std::map<std::string, int> fb_to_ids = {
-                { "fu0", 0 },
-                { "fu1", 1 },
-                { "fd0", 2 },
-                { "fd1", 3 },
-                { "fl0", 4 },
-                { "fl1", 5 },
-                { "fr0", 6 },
-                { "fr1", 7 } };
-  std::map<int, std::string> ids_to_fb = {
-                { 0, "fu0" },
-                { 1, "fu1" },
-                { 2, "fd0" },
-                { 3, "fd1" },
-                { 4, "fl0" },
-                { 5, "fl1" },
-                { 6, "fr0" },
-                { 7, "fr1" } };
+  //std::map<std::string, int> fb_to_ids = {
+  //              { "fu0", 0 },
+  //              { "fu1", 1 },
+  //              { "fd0", 2 },
+  //              { "fd1", 3 },
+  //              { "fl0", 4 },
+  //              { "fl1", 5 },
+  //              { "fr0", 6 },
+  //              { "fr1", 7 } };
+  //std::map<int, std::string> ids_to_fb = {
+  //              { 0, "fu0" },
+  //              { 1, "fu1" },
+  //              { 2, "fd0" },
+  //              { 3, "fd1" },
+  //              { 4, "fl0" },
+  //              { 5, "fl1" },
+  //              { 6, "fr0" },
+  //              { 7, "fr1" } };
 
   //get all the footbots
-  for(int i=0; i<8; i++)
-  {
-    m_pcEFootbots[i] = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity(ids_to_fb[i]));
-  }
+  //for(int i=0; i<8; i++)
+  //{
+  //  m_pcEFootbots[i] = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity(ids_to_fb[i]));
+  //}
+  
+  CSpace::TMapPerType& fbMap = *(&GetSpace().GetEntitiesByType("foot-bot"));
+  int nbFb = fbMap.size();
+  m_env.setNbFb(nbFb);
+
+  std::vector<CFootBotEntity*> m_pcEFootbots (nbFb);
+  std::vector<CFootBotCrossroadController*> m_pcControllers (nbFb);
+  std::string str;
   // don't break existing code while it's not adapted
   m_pcEFootBot = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity("fu0"));
 
   //for the initial velocities
   //std::array<float, 8> init_velocities;
-  std::vector<float> init_velocities (8, 0.0);
+  std::vector<float> init_velocities (nbFb, 0.0);
+
+  int j;
+  CSpace::TMapPerType::iterator it;
+
+  for(it=fbMap.begin(), j=0; it != fbMap.end(); ++it, ++j)
+  {
+    // get the current footbot's id
+    str = it->first;
+    // get the associated entity
+    m_pcEFootbots[j] = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity(str));
+    // get the associated controller
+    m_pcControllers[j] = &dynamic_cast<CFootBotCrossroadController&>(m_pcEFootbots[j]->GetControllableEntity().GetController());
+    // pass it the environment
+    m_pcControllers[j]->setEnvironment(&m_env);
+    // give it its numerical id
+    m_pcControllers[j]->setFbId(j);
+    // get initial velocity
+    std::cerr << "Getting initial velocity " << j << std::endl;
+    init_velocities[j] = m_pcControllers[j]->getInitialVelocity();
+  }
 
   //get all the controllers
-  for(int i=0; i<8; i++)
-  {
-    m_pcControllers[i] = &dynamic_cast<CFootBotCrossroadController&>((m_pcEFootbots[i])->GetControllableEntity().GetController());
-    // set the environment
-    m_pcControllers[i]->setEnvironment(&m_env);
-    m_pcControllers[i]->setFbId(fb_to_ids[m_pcControllers[i]->getstrId()]);
-    // get initial velocity
-    std::cerr << "Getting initial velocities" << std::endl;
-    init_velocities[i] = m_pcControllers[i]->getInitialVelocity();
-  }
+  //for(int i=0; i<8; i++)
+  //{
+  //  m_pcControllers[i] = &dynamic_cast<CFootBotCrossroadController&>((m_pcEFootbots[i])->GetControllableEntity().GetController());
+  //  // set the environment
+  //  m_pcControllers[i]->setEnvironment(&m_env);
+  //  m_pcControllers[i]->setFbId(fb_to_ids[m_pcControllers[i]->getstrId()]);
+  //  // get initial velocity
+  //  std::cerr << "Getting initial velocities" << std::endl;
+  //  init_velocities[i] = m_pcControllers[i]->getInitialVelocity();
+  //}
+  
   // don't break existing code while it's not adapted
   m_pcController = &dynamic_cast<CFootBotCrossroadController&>(m_pcEFootBot->GetControllableEntity().GetController());
 
-  m_env.setNbFb(8);
   // set initial velocities in the environment
   std::cerr << "Setting initial velocities" << std::endl;
-  m_env.setActions(&(init_velocities[0]));
+  for(int i=0; i<nbFb; ++i)
+    std::cerr << init_velocities[i] << std::endl;
+  m_env.setActions(init_velocities);
 
   std::cerr << "loop functions initialized" << std::endl;
 }

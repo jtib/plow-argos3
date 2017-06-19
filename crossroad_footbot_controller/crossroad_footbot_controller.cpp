@@ -9,8 +9,6 @@
 #include <argos3/core/utility/math/angles.h>
 #include <QImage>
 
-#include "../embedding/global.h"
-
 /****************************************/
 /****************************************/
 
@@ -111,6 +109,7 @@ void CFootBotCrossroadController::ControlStep() {
   std::cerr << "entering control step" << std::endl;
   // get the action to execute
   float wheel_speed = m_env->getActions(m_fb_id);
+  std::cerr << "Action [" << m_fb_id << "]: " << wheel_speed << std::endl;
   // execute the action (throttle)
   m_pcWheels->SetLinearVelocity(wheel_speed, wheel_speed);
 

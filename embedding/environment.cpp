@@ -44,6 +44,13 @@ void Environment::setActions(float * to_do)
   m_actions = to_do;
 }
 
+void Environment::setActions(std::vector<float> to_do)
+{
+  std::copy(to_do.begin(), to_do.end(), m_actions);
+  for(int i=0; i<nbFb; ++i)
+    std::cerr << m_actions[i] << std::endl;
+}
+
 float * Environment::getpActions()
 {
   return m_actions;

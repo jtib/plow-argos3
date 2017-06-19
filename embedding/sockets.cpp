@@ -70,7 +70,10 @@ void Sockets::receive()
 
     pClientSocket->read_some(boost::asio::buffer(actions, (m_env->getNbFb())*sizeof(float)), error);
 
-    m_env->setActions(actions);//is this necessary?
+    for(int i=0; i<m_env->getNbFb(); ++i)
+      std::cout << actions[i] << std::endl;
+
+    //m_env->setActions(actions);//is this necessary?
   }
   catch (std::exception& e)
   {

@@ -67,6 +67,11 @@ public:
   //void setActions(std::array<float, 8>& to_do);
   
   /**
+   * Set actions with a vector
+   */
+  void setActions(std::vector<float> to_do);
+  
+  /**
    * Get pointer to actions
    */
   float * getpActions();
