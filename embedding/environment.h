@@ -14,10 +14,14 @@
 
 class Environment
 {
-  std::array<std::array<std::array<float, 2>, 24>, 8> m_proximities;
-  std::array<float, 8> m_speeds;
-  std::array<float, 8> m_distances;
+  int nbFb;
+
+  //std::array<float, 384> m_proximities;
+  float * m_speeds;
+  float * m_distances;
+  float * m_proximities;
   
+  //float * m_actions;
   std::array<float, 8> m_actions;
   bool m_actions_executed;
   bool m_actions_updated;
@@ -47,9 +51,20 @@ public:
   void incTime();
 
   /**
+   * Set the number of footbots
+   */
+  void setNbFb(int numFb);
+
+  /**
+   * Get the number of footbots
+   */
+  int getNbFb();
+
+  /**
    * Set the next actions to execute.
    */
-  void setActions(const std::array<float, 8>& to_do);
+  //void setActions(float * to_do);
+  void setActions(std::array<float, 8>& to_do);
 
   /**
    * Sends the footbot whose id it is the action it must do.
@@ -60,22 +75,22 @@ public:
   /**
    * Sets the state for one fb
    */
-  void setState(int fb_id, std::array<std::array<float, 2>, 24> proximities, float speed, float distance);
+  void setState(int fb_id, std::array<float, 48> proximities, float speed, float distance);
 
   /**
    * Get the proximities as one huge array
    */
-  std::array<float, 384> getProximities();
+  float * getProximities();
 
   /**
    * Get the speeds
    */
-  std::array<float, 8> getSpeeds();
+  float * getSpeeds();
 
   /**
    * Get the distances
    */
-  std::array<float, 8> getDistances();
+  float * getDistances();
 
 };
 

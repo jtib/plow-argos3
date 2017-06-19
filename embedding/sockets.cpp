@@ -46,9 +46,9 @@ void Sockets::send()
     std::vector<uint8_t> frame;
     // get state
     std::vector<boost::asio::const_buffer> state;
-    state.push_back(boost::asio::buffer(m_env->getProximities()));
-    state.push_back(boost::asio::buffer(m_env->getSpeeds()));
-    state.push_back(boost::asio::buffer(m_env->getDistances()));
+    state.push_back(boost::asio::buffer(m_env->getProximities(), (m_env->getNbFb())*48*sizeof(float)));
+    state.push_back(boost::asio::buffer(m_env->getSpeeds(), (m_env->getNbFb())*sizeof(float)));
+    state.push_back(boost::asio::buffer(m_env->getDistances(), (m_env->getNbFb())*sizeof(float)));
     // Send state info
     pClientSocket->send(state);
   }
@@ -64,6 +64,7 @@ void Sockets::receive()
   try
   {
     std::array<float, 8> actions;
+    //float * actions;
     requestCount++;
     boost::system::error_code error;
 

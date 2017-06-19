@@ -70,6 +70,8 @@ void CCrossroadFunctionsFb::Init(TConfigurationNode& t_node) {
   std::cerr << "Setting initial velocities" << std::endl;
   m_env.setActions(init_velocities);
 
+  m_env.setNbFb(8);
+
   std::cerr << "loop functions initialized" << std::endl;
 }
 

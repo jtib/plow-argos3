@@ -93,13 +93,13 @@ void CFootBotCrossroadController::setFbId(int FbId)
 /****************************************/
 /****************************************/
 
-std::array<std::array<float, 2>, 24> CFootBotCrossroadController::ConvertTReadings(CCI_FootBotProximitySensor::TReadings& proximities)
+std::array<float, 48> CFootBotCrossroadController::ConvertTReadings(CCI_FootBotProximitySensor::TReadings& proximities)
 {
-  std::array<std::array<float, 2>, 24> proxima;
+  std::array<float, 48> proxima;
   for(int i = 0; i<24; i++)
   {
-    proxima[i][0] = proximities[i].Value;
-    proxima[i][1] = proximities[i].Angle.GetValue();
+    proxima[2*i] = proximities[i].Value;
+    proxima[2*i+1] = proximities[i].Angle.GetValue();
   }
   return proxima;
 }
@@ -116,7 +116,7 @@ void CFootBotCrossroadController::ControlStep() {
 
   // set the new state for this footbot
   CCI_FootBotProximitySensor::TReadings proximities = m_pcProximity->GetReadings();
-  std::array<std::array<float, 2>, 24> proxim_readings = this->ConvertTReadings(proximities);
+  std::array<float, 48> proxim_readings = this->ConvertTReadings(proximities);
   m_distance += wheel_speed;
   m_env->setState(m_fb_id, proxim_readings, wheel_speed, m_distance);
   
