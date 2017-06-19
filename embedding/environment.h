@@ -21,8 +21,8 @@ class Environment
   float * m_distances;
   float * m_proximities;
   
-  //float * m_actions;
-  std::array<float, 8> m_actions;
+  float * m_actions;
+  //std::array<float, 8> m_actions;
   bool m_actions_executed;
   bool m_actions_updated;
 
@@ -63,8 +63,13 @@ public:
   /**
    * Set the next actions to execute.
    */
-  //void setActions(float * to_do);
-  void setActions(std::array<float, 8>& to_do);
+  void setActions(float * to_do);
+  //void setActions(std::array<float, 8>& to_do);
+  
+  /**
+   * Get pointer to actions
+   */
+  float * getpActions();
 
   /**
    * Sends the footbot whose id it is the action it must do.

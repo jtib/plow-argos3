@@ -63,14 +63,14 @@ void Sockets::receive()
   std::cerr << "receiving" << std::endl;
   try
   {
-    std::array<float, 8> actions;
-    //float * actions;
+    //std::array<float, 8> actions;
+    float * actions = m_env->getpActions();
     requestCount++;
     boost::system::error_code error;
 
-    pClientSocket->read_some(boost::asio::buffer(actions), error);
+    pClientSocket->read_some(boost::asio::buffer(actions, (m_env->getNbFb())*sizeof(float)), error);
 
-    m_env->setActions(actions);
+    m_env->setActions(actions);//is this necessary?
   }
   catch (std::exception& e)
   {

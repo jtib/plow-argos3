@@ -50,7 +50,8 @@ void CCrossroadFunctionsFb::Init(TConfigurationNode& t_node) {
   m_pcEFootBot = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity("fu0"));
 
   //for the initial velocities
-  std::array<float, 8> init_velocities;
+  //std::array<float, 8> init_velocities;
+  std::vector<float> init_velocities (8, 0.0);
 
   //get all the controllers
   for(int i=0; i<8; i++)
@@ -66,11 +67,10 @@ void CCrossroadFunctionsFb::Init(TConfigurationNode& t_node) {
   // don't break existing code while it's not adapted
   m_pcController = &dynamic_cast<CFootBotCrossroadController&>(m_pcEFootBot->GetControllableEntity().GetController());
 
+  m_env.setNbFb(8);
   // set initial velocities in the environment
   std::cerr << "Setting initial velocities" << std::endl;
-  m_env.setActions(init_velocities);
-
-  m_env.setNbFb(8);
+  m_env.setActions(&(init_velocities[0]));
 
   std::cerr << "loop functions initialized" << std::endl;
 }

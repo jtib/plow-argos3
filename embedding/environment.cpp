@@ -3,8 +3,7 @@
 Environment::Environment()
 {
   t = 0;
-  m_actions.fill(0.0);
-  //TODO: get initial random speed
+  //m_actions.fill(0.0);
   m_actions_executed = false;
   m_actions_updated = true;
 }
@@ -30,6 +29,7 @@ void Environment::setNbFb(int numFb)
   m_speeds = new float[nbFb];
   m_distances = new float[nbFb];
   m_proximities = new float[nbFb*48];
+  m_actions = new float[nbFb];
 }
 
 int Environment::getNbFb()
@@ -37,10 +37,16 @@ int Environment::getNbFb()
   return nbFb;
 }
 
-void Environment::setActions(std::array<float,8>& to_do)
+//void Environment::setActions(std::array<float,8>& to_do)
+void Environment::setActions(float * to_do)
 {
   //memcpy(m_actions, to_do, nbFb*sizeof(float));
   m_actions = to_do;
+}
+
+float * Environment::getpActions()
+{
+  return m_actions;
 }
 
 float Environment::getActions(const int id)
