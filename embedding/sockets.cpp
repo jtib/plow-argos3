@@ -63,7 +63,6 @@ void Sockets::receive()
   std::cerr << "receiving" << std::endl;
   try
   {
-    //std::array<float, 8> actions;
     float * actions = m_env->getpActions();
     requestCount++;
     boost::system::error_code error;
@@ -72,8 +71,6 @@ void Sockets::receive()
 
     for(int i=0; i<m_env->getNbFb(); ++i)
       std::cout << actions[i] << std::endl;
-
-    //m_env->setActions(actions);//is this necessary?
   }
   catch (std::exception& e)
   {

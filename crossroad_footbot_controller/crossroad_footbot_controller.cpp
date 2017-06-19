@@ -118,22 +118,6 @@ void CFootBotCrossroadController::ControlStep() {
   std::array<float, 48> proxim_readings = this->ConvertTReadings(proximities);
   m_distance += wheel_speed;
   m_env->setState(m_fb_id, proxim_readings, wheel_speed, m_distance);
-  
-  
-//   //RLOG << "Position: " << m_positioningSensor->GetReading().Position << std::endl;
-//   if(img_bits != NULL){
-//	   RLOG << "Img bits: " << img_bits << std::endl;
-//	   RLOG << "Bytes count: " << bytesCount << std::endl;
-//	   RLOG << "Bytes per line: " << bytesPerLine << std::endl;
-//   }
-//
-//	std::map<std::string, CVector3>::iterator it = positions_all.begin();
-//	for(; it != positions_all.end(); ++it){
-//		RLOG << it->first << ". Readings: " << it->second << std::endl;
-//	}
-//
-//	// TODO:
-//	// images
 
 }
 

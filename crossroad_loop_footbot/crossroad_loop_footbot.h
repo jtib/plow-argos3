@@ -49,10 +49,8 @@ private:
   CQTOpenGLRender* m_Renderer;
   CQTOpenGLCamera* m_Camera;
   CQTOpenGLCamera::SSettings* m_CameraSettings;
-  //std::array<CFootBotEntity*, 8> m_pcEFootbots; 
   CFootBotEntity* m_SelectedEntity;
   CFootBotEntity* m_pcEFootBot;
-  //std::array<CFootBotCrossroadController*, 8> m_pcControllers;
   CFootBotCrossroadController* m_pcController;
 
   Environment m_env;

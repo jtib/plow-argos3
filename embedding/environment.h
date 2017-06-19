@@ -9,22 +9,18 @@
 #include <vector>
 #include <array>
 
-// argos2 includes
+// argos includes
 #include <argos3/plugins/robots/foot-bot/control_interface/ci_footbot_proximity_sensor.h>
 
 class Environment
 {
   int nbFb;
 
-  //std::array<float, 384> m_proximities;
   float * m_speeds;
   float * m_distances;
   float * m_proximities;
   
   float * m_actions;
-  //std::array<float, 8> m_actions;
-  bool m_actions_executed;
-  bool m_actions_updated;
 
   int t;
 
@@ -39,11 +35,6 @@ public:
    * Get time
    */
   int getTime();
-
-  /**
-   * Set time
-   */
-  void setTime(int time);
 
   /**
    * Increment time
@@ -64,7 +55,6 @@ public:
    * Set the next actions to execute.
    */
   void setActions(float * to_do);
-  //void setActions(std::array<float, 8>& to_do);
   
   /**
    * Set actions with a vector

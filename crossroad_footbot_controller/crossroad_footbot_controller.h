@@ -38,7 +38,6 @@
 #include "../embedding/environment.h"
 #include "../embedding/sockets.h"
 
-//#include <QGLWidget>
 #include <QElapsedTimer>
 #include <array>
 
