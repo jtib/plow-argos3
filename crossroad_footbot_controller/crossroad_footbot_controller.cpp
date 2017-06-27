@@ -102,6 +102,9 @@ std::array<float, 48> CFootBotCrossroadController::ConvertTReadings(CCI_FootBotP
   return proxima;
 }
 
+/*************************************/
+/*************************************/
+
 void CFootBotCrossroadController::ControlStep() {
   std::cerr << "entering control step" << std::endl;
   // get the action to execute

@@ -70,4 +70,3 @@ float * Environment::getDistances()
 {
   return m_distances;
 }
-

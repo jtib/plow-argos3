@@ -83,4 +83,3 @@ Sockets::~Sockets()
   pClientSocket->close();
   pServerSocket->close();
 }
-

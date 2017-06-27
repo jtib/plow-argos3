@@ -19,7 +19,6 @@
 #include <argos3/plugins/simulator/entities/box_entity.h>
 #include <QImage>
 #include <array>
-#include <vector>
 
 #ifdef __APPLE__
 #include <glu.h>
@@ -56,8 +55,6 @@ private:
 
   Environment m_env;
   Sockets m_soc;
-
-
 };
 
 #endif

@@ -12,9 +12,6 @@
 // argos includes
 #include <argos3/plugins/robots/foot-bot/control_interface/ci_footbot_proximity_sensor.h>
 
-#define STATE_SIZE 50
-#define PROXIM_SIZE 48
-
 class Environment
 {
   int nbFb;
@@ -55,6 +52,11 @@ public:
   int getNbFb();
 
   /**
+   * Set the next actions to execute.
+   */
+  void setActions(float * to_do);
+  
+  /**
    * Set actions with a vector
    */
   void setActions(std::vector<float> to_do);
@@ -65,36 +67,32 @@ public:
   float * getpActions();
 
   /**
-   * Set the next actions to execute.
-   */
-  void setActions(float* to_do);
-
-  /**
-   * Set the state for one footbot
-   */
-  void setState(int fb_id, std::array<float, 48> proximities, float speed, float distance);
-
-  /**
    * Sends the footbot whose id it is the action it must do.
    * Called from the loop.
    */
   float getActions(const int id);
-  
+
   /**
-   * Get the proximity readings
+   * Sets the state for one fb
+   */
+  void setState(int fb_id, std::array<float, 48> proximities, float speed, float distance);
+
+  /**
+   * Get the proximities as one huge array
    */
   float * getProximities();
-  
+
   /**
    * Get the speeds
    */
   float * getSpeeds();
-  
+
   /**
-   * Get the distance
+   * Get the distances
    */
   float * getDistances();
 
 };
 
 #endif
+
