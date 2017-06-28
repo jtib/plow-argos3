@@ -12,6 +12,8 @@
 // argos includes
 #include <argos3/plugins/robots/foot-bot/control_interface/ci_footbot_proximity_sensor.h>
 
+using uchar = unsigned char;
+
 class Environment
 {
   int nbFb;
@@ -19,10 +21,15 @@ class Environment
   float * m_speeds;
   float * m_distances;
   float * m_proximities;
+
+  uchar * m_imgBits;
+  int m_bytesCount;
+  int m_bytesPerLine;
   
   float * m_actions;
 
   int t;
+
 
 public:
 
@@ -78,6 +85,11 @@ public:
   void setState(int fb_id, std::array<float, 48> proximities, float speed, float distance);
 
   /**
+   * Sets the frame
+   */
+  void setFrame(uchar* img, int count, int count_per_line);
+
+  /**
    * Get the proximities as one huge array
    */
   float * getProximities();
@@ -91,6 +103,21 @@ public:
    * Get the distances
    */
   float * getDistances();
+
+  /**
+   * Get the frame
+   */
+  uchar * getFrame();
+
+  /**
+   * Get the byte count
+   */
+  int getByteCount();
+
+  /**
+   * Get the byte count per line
+   */
+  int getByteCountPerLine();
 
 };
 

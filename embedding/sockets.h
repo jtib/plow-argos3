@@ -27,7 +27,7 @@ public:
 
   void start();
 
-  void send();
+  void send(std::string dataType);
 
   void receive();
 

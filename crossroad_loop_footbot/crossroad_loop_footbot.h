@@ -53,6 +53,10 @@ private:
   CFootBotEntity* m_pcEFootBot;
   CFootBotCrossroadController* m_pcController;
 
+  std::string m_chosen;
+
+  std::string dataExchanged;
+
   Environment m_env;
   Sockets m_soc;
 };

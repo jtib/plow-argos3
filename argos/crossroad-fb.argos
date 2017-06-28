@@ -29,7 +29,7 @@
         <range_and_bearing implementation="medium" medium="rab" show_rays="true" noise_std_dev="0" />
         <footbot_proximity implementation="default" show_rays="false" />
       </sensors>
-      <params alpha="7.5" delta="0.1" velocity="15" />
+      <params alpha="7.5" delta="0.1" velocity="12" min_speed="2" max_speed="25" chosen_frame="fu0"/>
     </crossroad_footbot_controller>
 
   </controllers>
@@ -88,13 +88,14 @@
     </box>
 
     <!--
-        You can distribute entities randomly. Here, we distribute
-        10 foot-bots in this way:
+        You can distribute entities randomly. We could distribute
+        8 foot-bots in this way:
         - the position is uniformly distributed
         on the ground, in the square whose corners are (-2,-2) and (2,2)
         - the orientations are non-zero only when rotating around Z and chosen
         from a gaussian distribution, whose mean is zero degrees and
         standard deviation is 360 degrees.
+        Here, their positions are manually set.
     -->
 
     <!-- footboot up (id: fu0, fu1) -->

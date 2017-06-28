@@ -61,12 +61,15 @@ void CFootBotCrossroadController::Init(TConfigurationNode& t_node) {
    m_cGoStraightAngleRange.Set(-ToRadians(m_cAlpha), ToRadians(m_cAlpha));
    GetNodeAttributeOrDefault(t_node, "delta", m_fDelta, m_fDelta);
    GetNodeAttributeOrDefault(t_node, "velocity", m_fWheelVelocity, m_fWheelVelocity);
-
-   selected_robot = "fu0";
 }
 
 /****************************************/
 /****************************************/
+
+void CFootBotCrossroadController::setInitialPosition(CVector3 init_pos)
+{
+  m_initial_position = init_pos;
+}
 
 void CFootBotCrossroadController::setEnvironment(Environment* env)
 {
@@ -86,6 +89,11 @@ std::string CFootBotCrossroadController::getstrId()
 void CFootBotCrossroadController::setFbId(int FbId)
 {
   m_fb_id = FbId;
+}
+
+void CFootBotCrossroadController::setDataType(std::string dt)
+{
+  data_type = dt;
 }
 
 /****************************************/
@@ -114,11 +122,14 @@ void CFootBotCrossroadController::ControlStep() {
   m_pcWheels->SetLinearVelocity(wheel_speed, wheel_speed);
 
   // set the new state for this footbot
-  CCI_FootBotProximitySensor::TReadings proximities = m_pcProximity->GetReadings();
-  std::array<float, 48> proxim_readings = this->ConvertTReadings(proximities);
-  m_distance += wheel_speed;
-  m_env->setState(m_fb_id, proxim_readings, wheel_speed, m_distance);
-
+  if(data_type != "frame")
+  {
+    CCI_FootBotProximitySensor::TReadings proximities = m_pcProximity->GetReadings();
+    std::array<float, 48> proxim_readings = this->ConvertTReadings(proximities);
+    //m_distance += wheel_speed;
+    m_distance = (m_footbot->GetEmbodiedEntity().GetOriginAnchor().Position - m_initial_position).Length();
+    m_env->setState(m_fb_id, proxim_readings, wheel_speed, m_distance);
+  }
 }
 
 /****************************************/

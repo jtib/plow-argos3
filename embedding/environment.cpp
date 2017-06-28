@@ -56,6 +56,13 @@ void Environment::setState(int fb_id, std::array<float, 48> proximities, float s
   m_distances[fb_id] = distance;
 }
 
+void Environment::setFrame(uchar* img, int count, int count_per_line)
+{
+  m_bytesCount = count;
+  m_bytesPerLine = count_per_line;
+  memcpy(m_imgBits + count, img, count);
+}
+
 float * Environment::getProximities()
 {
   return m_proximities;
@@ -69,4 +76,19 @@ float * Environment::getSpeeds()
 float * Environment::getDistances()
 {
   return m_distances;
+}
+
+uchar * Environment::getFrame()
+{
+  return m_imgBits;
+}
+
+int Environment::getByteCount()
+{
+  return m_bytesCount;
+}
+
+int Environment::getByteCountPerLine()
+{
+  return m_bytesPerLine;
 }

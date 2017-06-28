@@ -35,6 +35,7 @@
 #include <argos3/plugins/robots/foot-bot/control_interface/ci_footbot_proximity_sensor.h>
 #include <argos3/core/simulator/entity/entity.h>
 
+#include <argos3/plugins/robots/foot-bot/simulator/footbot_entity.h>
 #include "../embedding/environment.h"
 #include "../embedding/sockets.h"
 
@@ -116,11 +117,12 @@ class CFootBotCrossroadController : public CCI_Controller {
     */
    virtual void Destroy() {}
 
+   void setDataType(std::string dt);
+
    uchar* img_bits;
    int bytesCount;
    int bytesPerLine;
    std::map<std::string, CVector3> positions_all;
-   std::string selected_robot;
 
 private:
 
@@ -163,9 +165,36 @@ private:
     * to pass to the environment.
     */
    std::array<float, 48> ConvertTReadings(CCI_FootBotProximitySensor::TReadings& proximities);
-   
+  
+   /**
+    * index of the associated footbot (!= id of the associated footbot)
+    */
    int m_fb_id;
+
+   /**
+    * Environment
+    */
    Environment* m_env;
+
+   /**
+    * Type of data exchanged (frame, numerical data)
+    */
+   std::string data_type;
+
+   /**
+    * Pointer to the associated footbot
+    */
+   CFootBotEntity* m_footbot;
+
+   /**
+    * Initial position
+    */
+   CVector3 m_initial_position;
+
+   /**
+    * Set the initial position (only the info)
+    */
+   void setInitialPosition(CVector3 init_pos);
 
 };
 

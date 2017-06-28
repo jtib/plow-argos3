@@ -21,6 +21,9 @@ void CCrossroadFunctionsFb::Init(TConfigurationNode& t_node) {
   std::cerr << "entering loop init" << std::endl;
   m_soc.start();
   std::cerr << "soc started" << std::endl;
+
+  // frame or numerical data
+  dataExchanged = std::getenv("DATA");
   
   CSpace::TMapPerType& fbMap = *(&GetSpace().GetEntitiesByType("foot-bot"));
   int nbFb = fbMap.size();
@@ -29,8 +32,6 @@ void CCrossroadFunctionsFb::Init(TConfigurationNode& t_node) {
   std::vector<CFootBotEntity*> m_pcEFootbots (nbFb);
   std::vector<CFootBotCrossroadController*> m_pcControllers (nbFb);
   std::string str;
-  // don't break existing code while it's not adapted
-  m_pcEFootBot = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity("fu0"));
 
   //for the initial velocities
   std::vector<float> init_velocities (nbFb, 0.0);
@@ -53,10 +54,17 @@ void CCrossroadFunctionsFb::Init(TConfigurationNode& t_node) {
     // get initial velocity
     std::cerr << "Getting initial velocity " << j << std::endl;
     init_velocities[j] = m_pcControllers[j]->getInitialVelocity();
+    // set data type
+    m_pcControllers[j]->setDataType(dataExchanged);
   }
 
-  // don't break existing code while it's not adapted
-  m_pcController = &dynamic_cast<CFootBotCrossroadController&>(m_pcEFootBot->GetControllableEntity().GetController());
+  // Get the footbot that will return its frame
+  GetNodeAttributeOrDefault(t_node, "chosen", m_chosen, m_chosen);
+  if(m_chosen != "")
+  {
+    m_pcEFootBot = dynamic_cast<CFootBotEntity*>(&GetSpace().GetEntity(m_chosen));
+    m_pcController = &dynamic_cast<CFootBotCrossroadController&>(m_pcEFootBot->GetControllableEntity().GetController());
+  }
 
   // set initial velocities in the environment
   std::cerr << "Setting initial velocities" << std::endl;
@@ -126,7 +134,19 @@ void CCrossroadFunctionsFb::PreStep(){
 void CCrossroadFunctionsFb::PostStep(){
   std::cerr << "entering post-step" << std::endl;
   m_env.incTime();
-  m_soc.send();
+  if(dataExchanged != "numerical")
+  {
+    m_Renderer = dynamic_cast<CQTOpenGLRender*>(&GetSimulator().GetVisualization());
+    m_Camera = &m_Renderer->GetMainWindow().GetOpenGLWidget().GetCamera();
+    CQTOpenGLWidget *m_OpenGlWidget = &m_Renderer->GetMainWindow().GetOpenGLWidget();
+    CQTOpenGLWidget::SFrameGrabData *frame = &m_OpenGlWidget->GetFrameGrabData();
+
+    uchar * img = m_OpenGlWidget->grabFramebuffer().bits();
+    int bc = m_OpenGlWidget->grabFramebuffer().byteCount();
+    int bcl = m_OpenGlWidget->grabFramebuffer().bytesPerLine();
+    m_env.setFrame(img, bc, bcl);
+  }
+  m_soc.send(dataExchanged);
 }
 
 /****************************************/

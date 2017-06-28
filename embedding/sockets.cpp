@@ -37,20 +37,45 @@ void Sockets::start()
   }
 }
 
-void Sockets::send()
+void Sockets::send(std::string dataType)
 {
   std::cerr << "sending" << std::endl;
   try
   {
-    // Frame
-    std::vector<uint8_t> frame;
-    // get state
-    std::vector<boost::asio::const_buffer> state;
-    state.push_back(boost::asio::buffer(m_env->getProximities(), (m_env->getNbFb())*48*sizeof(float)));
-    state.push_back(boost::asio::buffer(m_env->getSpeeds(), (m_env->getNbFb())*sizeof(float)));
-    state.push_back(boost::asio::buffer(m_env->getDistances(), (m_env->getNbFb())*sizeof(float)));
-    // Send state info
-    pClientSocket->send(state);
+    if(dataType == "frame")
+    {
+      // get frame
+      std::vector<boost::asio::const_buffer> frame;
+      int bc [2] = {m_env->getByteCount(), m_env->getByteCountPerLine()};
+      frame.push_back(boost::asio::buffer(bc));
+      frame.push_back(boost::asio::buffer(m_env->getFrame(), bc[0]));
+      // send frame
+      pClientSocket->send(frame);
+    }
+    else if(dataType == "numeric")
+    {
+      // get state
+      std::vector<boost::asio::const_buffer> state;
+      state.push_back(boost::asio::buffer(m_env->getProximities(), (m_env->getNbFb())*48*sizeof(float)));
+      state.push_back(boost::asio::buffer(m_env->getSpeeds(), (m_env->getNbFb())*sizeof(float)));
+      state.push_back(boost::asio::buffer(m_env->getDistances(), (m_env->getNbFb())*sizeof(float)));
+      // Send state info
+      pClientSocket->send(state);
+    }
+    else
+    {
+      std::vector<boost::asio::const_buffer> all;
+      // get frame
+      int bc [2] = {m_env->getByteCount(), m_env->getByteCountPerLine()};
+      all.push_back(boost::asio::buffer(bc));
+      all.push_back(boost::asio::buffer(m_env->getFrame(), bc[0]));
+      // get state
+      all.push_back(boost::asio::buffer(m_env->getProximities(), (m_env->getNbFb())*48*sizeof(float)));
+      all.push_back(boost::asio::buffer(m_env->getSpeeds(), (m_env->getNbFb())*sizeof(float)));
+      all.push_back(boost::asio::buffer(m_env->getDistances(), (m_env->getNbFb())*sizeof(float)));
+      // Send state info
+      pClientSocket->send(all);
+    }
   }
   catch(std::exception& e)
   {
