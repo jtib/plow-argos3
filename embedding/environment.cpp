@@ -59,8 +59,12 @@ void Environment::setState(int fb_id, std::array<float, 48> proximities, float s
 void Environment::setFrame(uchar* img, int count, int count_per_line)
 {
   m_bytesCount = count;
+  std::cerr << count << std::endl;
   m_bytesPerLine = count_per_line;
-  memcpy(m_imgBits + count, img, count);
+  std::cerr << count_per_line << std::endl;
+  delete m_imgBits;
+  m_imgBits = new uchar[count];
+  std::copy(img, img + count, m_imgBits);
 }
 
 float * Environment::getProximities()
