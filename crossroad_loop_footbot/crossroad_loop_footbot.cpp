@@ -120,6 +120,7 @@ void CCrossroadFunctionsFb::SetPovCamera()
 /*************************************/
 
 void CCrossroadFunctionsFb::PreStep(){
+  usleep(1000000);
   std::cerr << "entering prestep" << std::endl;
   if(m_env.getTime()!=0)
   {

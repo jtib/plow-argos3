@@ -126,8 +126,9 @@ void CFootBotCrossroadController::ControlStep() {
   {
     CCI_FootBotProximitySensor::TReadings proximities = m_pcProximity->GetReadings();
     std::array<float, 48> proxim_readings = this->ConvertTReadings(proximities);
-    //m_distance += wheel_speed;
-    m_distance = (m_footbot->GetEmbodiedEntity().GetOriginAnchor().Position - m_initial_position).Length();
+    m_distance += (wheel_speed/10);
+    //CVector3 dist = m_footbot->GetEmbodiedEntity().GetOriginAnchor().Position - m_initial_position;
+    //m_distance = dist.Length();
     m_env->setState(m_fb_id, proxim_readings, wheel_speed, m_distance);
   }
 }

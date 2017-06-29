@@ -52,7 +52,7 @@ void Sockets::send(std::string dataType)
       // send frame
       pClientSocket->send(frame);
     }
-    else if(dataType == "numeric")
+    else if(dataType == "numerical")
     {
       // get state
       std::vector<boost::asio::const_buffer> state;
