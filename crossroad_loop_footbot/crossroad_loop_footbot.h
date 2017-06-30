@@ -7,8 +7,7 @@
 #include <argos3/plugins/simulator/visualizations/qt-opengl/qtopengl_render.h>
 #include <argos3/plugins/simulator/visualizations/qt-opengl/qtopengl_camera.h>
 #include <argos3/plugins/simulator/visualizations/qt-opengl/qtopengl_user_functions.h>
-#include "/home/juliette/Documents/mila/plow-argos3/crossroad_footbot_controller/crossroad_footbot_controller.h"
-//#include <QGLWidget>
+#include "../crossroad_footbot_controller/crossroad_footbot_controller.h"
 #include <QElapsedTimer>
 #include <argos3/plugins/robots/generic/control_interface/ci_differential_steering_actuator.h>
 #include "../embedding/sockets.h"
