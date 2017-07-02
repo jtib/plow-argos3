@@ -180,11 +180,11 @@
   <!-- * Visualization * -->
   <!-- ****************** -->
   <visualization>
-    <qt-opengl>
+    <!--qt-opengl>
       <camera>
         <placement idx="0" position="-5,0,2" look_at="0,0,0" lens_focal_length="20" />
       </camera>
-    </qt-opengl>
+    </qt-opengl-->
 
   </visualization>
 
