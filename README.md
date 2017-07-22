@@ -12,6 +12,6 @@ $ mkdir build && cd build
 $ cmake .. && make
 ```
 ## Authors
-Ivan Svogor: initial commit
-Juliette Tibayrenc
-Winning team of the PLOW challenge: Anthony Dentinger, Jayant Harilela & Emir Khaled Belhaddad [see d9a751e7]
+* Ivan Svogor: initial commit
+* Juliette Tibayrenc
+* Winning team of the PLOW challenge: Anthony Dentinger, Jayant Harilela & Emir Khaled Belhaddad [see d9a751e7]
