@@ -7,8 +7,7 @@
 #include <argos3/plugins/simulator/visualizations/qt-opengl/qtopengl_render.h>
 #include <argos3/plugins/simulator/visualizations/qt-opengl/qtopengl_camera.h>
 #include <argos3/plugins/simulator/visualizations/qt-opengl/qtopengl_user_functions.h>
-#include "/home/juliette/Documents/mila/plow-argos3/crossroad_footbot_controller/crossroad_footbot_controller.h"
-//#include <QGLWidget>
+#include "../crossroad_footbot_controller/crossroad_footbot_controller.h"
 #include <QElapsedTimer>
 #include <argos3/plugins/robots/generic/control_interface/ci_differential_steering_actuator.h>
 #include "../embedding/sockets.h"
@@ -19,6 +18,7 @@
 #include <argos3/plugins/simulator/entities/box_entity.h>
 #include <QImage>
 #include <array>
+#include <map>
 
 #ifdef __APPLE__
 #include <glu.h>
@@ -38,11 +38,16 @@ public:
  void Update();
  virtual void PreStep();
  virtual void PostStep();
+ virtual bool IsExperimentFinished();
 
 private:
 
   void ResetPosition();
+  // Removes footbots that have reached a wall (including the road walls).
+  void RemoveFootBotsAgainstWalls();
+  void AddFootBots();
   void SetPovCamera();
+  CQuaternion OrientationFromPosition(CVector3 pos);
 
   CSimulator* m_Simulator;
 
@@ -52,13 +57,16 @@ private:
   CFootBotEntity* m_SelectedEntity;
   CFootBotEntity* m_pcEFootBot;
   CFootBotCrossroadController* m_pcController;
-
   std::string m_chosen;
-
   std::string dataExchanged;
-
   Environment m_env;
   Sockets m_soc;
+
+  // Added attributes
+  CQuaternion m_orient1;
+  CQuaternion m_orient2;
+  CQuaternion m_orient3;
+  CQuaternion m_orient4;
 };
 
 #endif

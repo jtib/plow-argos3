@@ -1,21 +1,3 @@
-/*
- * AUTHOR: Carlo Pinciroli <cpinciro@ulb.ac.be>
- *
- * An example diffusion controller for the foot-bot.
- *
- * This controller makes the robots behave as gas particles. The robots
- * go straight until they get close enough to another robot, in which
- * case they turn, loosely simulating an elastic collision. The net effect
- * is that over time the robots diffuse in the environment.
- *
- * The controller uses the proximity sensor to detect obstacles and the
- * wheels to move the robot around.
- *
- * This controller is meant to be used with the XML files:
- *    experiments/diffusion_1.argos
- *    experiments/diffusion_10.argos
- */
-
 #ifndef CROSSROAD_FOOTBOT_CONTROLLER_H
 #define CROSSROAD_FOOTBOT_CONTROLLER_H
 
@@ -87,6 +69,11 @@ class CFootBotCrossroadController : public CCI_Controller {
     * Get the str id
     */
    std::string getstrId();
+
+   /**
+    * Get the initial position
+    */
+   CVector3 getInitialPosition() const;
 
    /**
     * Set the int id

@@ -2,8 +2,8 @@
 #include <argos3/core/utility/configuration/argos_configuration.h>
 #include <argos3/plugins/simulator/entities/box_entity.h>
 #include <QImage>
+#include <string>
 #include "crossroad_loop_footbot.h"
-#include <unistd.h>
 
 static const Real POV_HEIGHT = 0.2f;
 
@@ -24,6 +24,13 @@ void CCrossroadFunctionsFb::Init(TConfigurationNode& t_node) {
 
   // frame or numerical data
   dataExchanged = std::getenv("DATA");
+
+  // Adding footbots to the arena.
+  GetNodeAttribute(t_node, "orient1", m_orient1);
+  GetNodeAttribute(t_node, "orient2", m_orient2);
+  GetNodeAttribute(t_node, "orient3", m_orient3);
+  GetNodeAttribute(t_node, "orient4", m_orient4);
+  AddFootBots();
   
   CSpace::TMapPerType& fbMap = *(&GetSpace().GetEntitiesByType("foot-bot"));
   int nbFb = fbMap.size();
@@ -120,7 +127,6 @@ void CCrossroadFunctionsFb::SetPovCamera()
 /*************************************/
 
 void CCrossroadFunctionsFb::PreStep(){
-  usleep(1000000);
   std::cerr << "entering prestep" << std::endl;
   if(m_env.getTime()!=0)
   {
@@ -148,6 +154,84 @@ void CCrossroadFunctionsFb::PostStep(){
     m_env.setFrame(img, bc, bcl);
   }
   m_soc.send(dataExchanged);
+
+  // Remove footbots that have reached a wall (including the road's walls).
+  // RemoveFootBotsAgainstWalls();
+}
+
+/*************************************/
+/*************************************/
+
+struct SFootBotData {
+  std::string id; ///< ID of the FootBot
+  CVector3 pos;   ///< Initial position of the FootBot
+};
+
+void CCrossroadFunctionsFb::AddFootBots() {
+    SFootBotData fbData[] = {
+    {.id = "fu0", .pos=CVector3(-2.0, -0.3, 0.0)},
+    {.id = "fu1", .pos=CVector3(-2.4, -0.7, 0.0)},
+    {.id = "fd0", .pos=CVector3( 2.0,  0.3, 0.0)},
+    {.id = "fd1", .pos=CVector3( 2.4,  0.7, 0.0)},
+    {.id = "fr0", .pos=CVector3(-0.3, -2.0, 0.0)},
+    {.id = "fr1", .pos=CVector3(-0.7, -2.4, 0.0)},
+    {.id = "fl0", .pos=CVector3( 0.3,  2.0, 0.0)},
+    {.id = "fl1", .pos=CVector3( 0.7,  2.4, 0.0)},
+  };
+  for (UInt32 i = 0; i < 8; ++i) {
+      CFootBotEntity* fb =
+        new CFootBotEntity(
+            fbData[i].id,
+            "fdc",
+            fbData[i].pos,
+            OrientationFromPosition(fbData[i].pos),
+            5.0,
+            2
+        );
+      AddEntity(*fb);
+  }
+}
+
+/****************************************/
+/****************************************/
+
+bool CCrossroadFunctionsFb::IsExperimentFinished() {
+  CSpace::TMapPerType& footbots = GetSpace().GetEntitiesByType("foot-bot");
+  return footbots.size() == 0;
+}
+
+/****************************************/
+/****************************************/
+
+void CCrossroadFunctionsFb::RemoveFootBotsAgainstWalls(){
+	CSpace::TMapPerType& footBots = GetSpace().GetEntitiesByType("foot-bot");
+
+	if(m_pcController != NULL){
+		m_pcController->positions_all.clear();
+	}
+
+	for(CSpace::TMapPerType::iterator it = footBots.begin(); it != footBots.end(); ++it) {
+		CFootBotEntity& fb = *any_cast<CFootBotEntity*>(it->second);
+
+		CQuaternion qOrientation = fb.GetEmbodiedEntity().GetOriginAnchor().Orientation;
+		CVector3& vPosition = fb.GetEmbodiedEntity().GetOriginAnchor().Position;
+
+		if(m_pcController != NULL){
+	    	m_pcController->positions_all.insert(std::make_pair(fb.GetId(), vPosition));
+    }
+
+		// Remove robots that reached a wall
+    Real x = vPosition.GetX(), y = vPosition.GetY();
+    bool isAgainstNESOWall = (x >=  4.7 || x <= -4.7 || y >=  4.7 || y <= -4.7);
+    bool isAgainstARoadWall = (
+      (x < -1 || x > 1) && (y < -0.7 || y > 0.7) ||
+      (y < -1 || y > 1) && (x < -0.7 || x > 0.7));
+		if(isAgainstNESOWall || isAgainstARoadWall) {
+			// LOGERR << "Placing footbot " << fb.GetId() << "\n";
+      // vPosition = dynamic_cast<CFootBotCrossroadController&>(fb.GetControllableEntity().GetController()).getInitialPosition();
+      RemoveEntity(fb);
+		}
+	}
 }
 
 /****************************************/
@@ -169,18 +253,41 @@ void CCrossroadFunctionsFb::ResetPosition(){
 
 		if(m_pcController != NULL){
 	    	m_pcController->positions_all.insert(std::make_pair(cFootBot.GetId(), vPosition));
-	    }
+    }
 
 		// check up/down robots
 		if(vPosition.GetX() >= 4.7 || vPosition.GetX() <= -4.7){ // map edge
-			vPosition.SetX(vPosition.GetX() - (vPosition.GetX() * 2));
+			vPosition.SetX(-0.95 * vPosition.GetX());
 		}
 		// check left/right robots
 		if(vPosition.GetY()>= 4.7 || vPosition.GetY() <= -4.7){
-			vPosition.SetY(vPosition.GetY() - (vPosition.GetY() * 2));
-		}
+			vPosition.SetY(-0.95 * vPosition.GetY());
+    }
 		cFootBot.GetEmbodiedEntity().MoveTo(vPosition, qOrientation, false);
 	}
+}
+
+/****************************************/
+/****************************************/
+
+CQuaternion CCrossroadFunctionsFb::OrientationFromPosition(CVector3 pos) {
+  CQuaternion orient;
+
+  Real x = pos.GetX(), y = pos.GetY();
+  if (x < -1) {       // Down
+    orient = m_orient1;
+  }
+  else if (x > 1) {   // Up
+    orient = m_orient3;
+  }
+  else if (y < -1) {  // Right
+    orient = m_orient2;
+  }
+  else {              // Left
+    orient = m_orient4;
+  }
+
+  return orient;
 }
 
 

@@ -86,6 +86,11 @@ std::string CFootBotCrossroadController::getstrId()
   return m_strId;
 }
 
+CVector3 CFootBotCrossroadController::getInitialPosition() const
+{
+  return m_initial_position;
+}
+
 void CFootBotCrossroadController::setFbId(int FbId)
 {
   m_fb_id = FbId;
