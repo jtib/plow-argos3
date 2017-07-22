@@ -17,14 +17,15 @@ find_package(Qt5OpenGL)
 find_package(Boost COMPONENTS system REQUIRED)
 find_package(Lua52 REQUIRED)
 
-include_directories(${CMAKE_SOURCE_DIR} ${ARGOS_INCLUDE_DIRS} ${LUA_INCLUDE_DIR} ${Boost_INCLUDE_DIRS})
+include_directories(${CMAKE_SOURCE_DIR} ${ARGOS_INCLUDE_DIRS} ${LUA_INCLUDE_DIR} ${BOOST_INCLUDE_DIRS})
 
 # Locations may vary
 add_library(crossroad_footbot_controller MODULE crossroad_footbot_controller.h crossroad_footbot_controller.cpp)
+
 target_link_libraries(crossroad_footbot_controller
-  /usr/lib/argos3/libargos3core_simulator.so
-  /usr/lib/argos3/libargos3plugin_simulator_footbot.so
-  /usr/lib/argos3/libargos3plugin_simulator_genericrobot.so
+  /usr/local/lib/argos3/libargos3core_simulator.so
+  /usr/local/lib/argos3/libargos3plugin_simulator_footbot.so
+  /usr/local/lib/argos3/libargos3plugin_simulator_genericrobot.so
   ${QT_LIBRARIES} ${GLUT_LIBRARY} ${OPENGL_LIBRARY} ${Boost_LIBRARIES})
 
 MESSAGE( STATUS "QT_LIBRARIES -> : " ${QT_LIBRARIES} )

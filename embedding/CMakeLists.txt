@@ -25,15 +25,15 @@ add_library(sockets MODULE sockets.h sockets.cpp)
 
 # The location of these libraries may vary
 target_link_libraries(environment
-  /usr/lib/argos3/libargos3core_simulator.so
-  /usr/lib/argos3/libargos3plugin_simulator_entities.so
-  /usr/lib/argos3/libargos3plugin_simulator_footbot.so
-  /usr/lib/argos3/libargos3plugin_simulator_qtopengl.so
+  /usr/local/lib/argos3/libargos3core_simulator.so
+  /usr/local/lib/argos3/libargos3plugin_simulator_entities.so
+  /usr/local/lib/argos3/libargos3plugin_simulator_footbot.so
+  /usr/local/lib/argos3/libargos3plugin_simulator_qtopengl.so
   ${QT_LIBRARIES} ${GLUT_LIBRARY} ${OPENGL_LIBRARY} ${Boost_LIBRARIES})
 
 target_link_libraries(sockets
-  /usr/lib/argos3/libargos3core_simulator.so
-  /usr/lib/argos3/libargos3plugin_simulator_entities.so
-  /usr/lib/argos3/libargos3plugin_simulator_footbot.so
-  /usr/lib/argos3/libargos3plugin_simulator_qtopengl.so
+  /usr/local/lib/argos3/libargos3core_simulator.so
+  /usr/local/lib/argos3/libargos3plugin_simulator_entities.so
+  /usr/local/lib/argos3/libargos3plugin_simulator_footbot.so
+  /usr/local/lib/argos3/libargos3plugin_simulator_qtopengl.so
   ${QT_LIBRARIES} ${GLUT_LIBRARY} ${OPENGL_LIBRARY} ${Boost_LIBRARIES})
