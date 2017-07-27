@@ -19,6 +19,8 @@
 #include <QImage>
 #include <array>
 #include <map>
+#include <string>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #ifdef __APPLE__
 #include <glu.h>
@@ -48,6 +50,8 @@ private:
   void AddFootBots();
   void SetPovCamera();
   CQuaternion OrientationFromPosition(CVector3 pos);
+  uchar * PreprocessFrame(uchar * frame, int bc, int bcl,
+      int bc_after, int bcl_after);
 
   CSimulator* m_Simulator;
 

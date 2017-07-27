@@ -1,11 +1,9 @@
-#include <argos3/core/utility/logging/argos_log.h>
-#include <argos3/core/utility/configuration/argos_configuration.h>
-#include <argos3/plugins/simulator/entities/box_entity.h>
-#include <QImage>
-#include <string>
 #include "crossroad_loop_footbot.h"
 
 static const Real POV_HEIGHT = 0.2f;
+
+/****************************************/
+/****************************************/
 
 CCrossroadFunctionsFb::CCrossroadFunctionsFb() :
 		m_pcController(NULL),
@@ -121,6 +119,20 @@ void CCrossroadFunctionsFb::SetPovCamera()
         m_CameraSettings->Position.Set((double)(pos_vec.GetX()), (double)(pos_vec.GetY()), POV_HEIGHT);
         m_CameraSettings->Target.Set(x, y, POV_HEIGHT);
     }
+}
+
+/*************************************/
+/*************************************/
+
+uchar * CCrossroadFunctionsFb::PreprocessFrame(uchar * frame, int bc, int bcl, int bc_after, int bcl_after)
+{
+  cv::Mat before = cv::Mat(bcl, bc/bcl, CV_8UC3, frame);
+  cv::Mat after = cv::Mat1f(bcl_after, bc_after/bcl_after);
+  double fx = bcl_after/bcl;
+  double fy = bcl*bc_after/bc*bcl_after;
+  cv::resize(before, after, after.size(), bcl_after, cv::INTER_AREA);
+  uchar * preprocessedFrame = after.data;
+  return preprocessedFrame;
 }
 
 /*************************************/

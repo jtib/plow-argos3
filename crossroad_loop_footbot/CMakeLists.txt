@@ -7,6 +7,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ARGOS_PREFIX}/share/argos3/cmake /u
 # Location may vary
 include(/usr/share/argos3/cmake/ARGoSCheckQTOpenGL.cmake)
 
+find_package(OpenCV REQUIRED)
+
 find_package(Qt5OpenGL)
 
 find_package(Lua52 REQUIRED)
@@ -27,6 +29,6 @@ target_link_libraries(crossroad_loop_footbot
   /usr/lib/argos3/libargos3plugin_simulator_entities.so
   /usr/lib/argos3/libargos3plugin_simulator_footbot.so
   /usr/lib/argos3/libargos3plugin_simulator_qtopengl.so
-  ${QT_LIBRARIES} ${GLUT_LIBRARY} ${OPENGL_LIBRARY})
+  ${QT_LIBRARIES} ${GLUT_LIBRARY} ${OPENGL_LIBRARY} ${OpenCV_LIBS})
 
 qt5_use_modules(crossroad_loop_footbot Widgets OpenGL)
