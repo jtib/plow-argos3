@@ -1,4 +1,5 @@
 #include "crossroad_loop_footbot.h"
+#include <unistd.h>
 
 static const Real POV_HEIGHT = 0.2f;
 
@@ -126,12 +127,14 @@ void CCrossroadFunctionsFb::SetPovCamera()
 
 uchar * CCrossroadFunctionsFb::PreprocessFrame(uchar * frame, int bc, int bcl, int bc_after, int bcl_after)
 {
+  usleep(10000000);
   cv::Mat before = cv::Mat(bcl, bc/bcl, CV_8UC3, frame);
   cv::Mat after = cv::Mat1f(bcl_after, bc_after/bcl_after);
   double fx = bcl_after/bcl;
   double fy = bcl*bc_after/bc*bcl_after;
   cv::resize(before, after, after.size(), bcl_after, cv::INTER_AREA);
   uchar * preprocessedFrame = after.data;
+  std::cerr << "after size: " << after.size() << std::endl;
   return preprocessedFrame;
 }
 
@@ -161,9 +164,15 @@ void CCrossroadFunctionsFb::PostStep(){
     CQTOpenGLWidget::SFrameGrabData *frame = &m_OpenGlWidget->GetFrameGrabData();
 
     uchar * img = m_OpenGlWidget->grabFramebuffer().bits();
+    size_t img_size = m_OpenGlWidget->
     int bc = m_OpenGlWidget->grabFramebuffer().byteCount();
     int bcl = m_OpenGlWidget->grabFramebuffer().bytesPerLine();
-    m_env.setFrame(img, bc, bcl);
+    uchar * preprocessedFrame = PreprocessFrame(img, bc, bcl, LINES, COLS);
+    m_env.setFrame(preprocessedFrame, LINES*COLS, LINES);
+
+    // save image
+    std::string imgName = "grame" + std::to_string(m_env.getTime()) + ".jpg";
+    m_OpenGlWidget->grabFramebuffer().save(imgName, 0, frame->Quality);
   }
   m_soc.send(dataExchanged);
 

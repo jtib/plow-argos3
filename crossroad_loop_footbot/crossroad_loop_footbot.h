@@ -30,6 +30,9 @@
 
 using namespace argos;
 
+#define LINES 84
+#define COLS 84
+
 class CCrossroadFunctionsFb : public CLoopFunctions {
 
 public:
